@@ -1,0 +1,84 @@
+# Production-grade RabbitMQ configuration for Docker Compose
+# Version omitted as per modern Docker Compose best practices (deprecated in 2023)
+# Compatible with Docker Compose v2.x and single-node Docker environments
+
+services:
+  rabbitmq:
+    # Use a specific, stable, and secure RabbitMQ image with management plugin
+    image: rabbitmq:3.13-management
+    # Explicit container name for predictability
+    container_name: rabbitmq
+    # Deploy constraints for resource management
+    deploy:
+      resources:
+        limits:
+          # Limit CPU and memory to prevent resource exhaustion
+          cpus: "1.0"
+          memory: 2G
+        reservations:
+          # Minimum resources for stable operation
+          cpus: "0.5"
+          memory: 1G
+    # Network configuration for isolation
+    networks:
+      - rabbitmq_net
+    # Expose necessary ports for AMQP and management UI
+    ports:
+      - "5672:5672" # AMQP protocol
+      - "15672:15672" # Management UI
+    # Persistent storage for message data, logs, and configuration
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro # Mount configuration file
+    # Environment variables for secure configuration
+    environment:
+      # Secure default credentials (override in production with secrets)
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=securepassword123
+      # Enable Erlang cookie for clustering (generate unique in production)
+      - RABBITMQ_ERLANG_COOKIE=secretcookie
+      # Optimize for high throughput
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 1000000000
+    # Healthcheck to ensure RabbitMQ is operational
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    # Restart policy for resilience
+    restart: unless-stopped
+    # Centralized logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Labels for observability and orchestration
+    labels:
+      - "com.example.description=RabbitMQ service"
+      - "com.example.environment=production"
+
+# Define persistent volumes
+volumes:
+  rabbitmq_data:
+    name: rabbitmq_data
+    # Optional: Use external volume for Kubernetes or managed storage
+    # external: true
+  rabbitmq_logs:
+    name: rabbitmq_logs
+
+# Define internal network for service isolation
+networks:
+  rabbitmq_net:
+    driver: bridge
+    # Bridge network for single-node Docker; switch to 'overlay' for Swarm
+# Notes:
+# - Replace RABBITMQ_DEFAULT_PASS with a secure password in production (use Docker secrets or vault).
+# - For Kubernetes, convert to a StatefulSet with persistent volume claims.
+# - Monitor with Prometheus (use rabbitmq-prometheus plugin) and integrate with Grafana.
+# - Enable TLS for ports 5672 and 15672 in production (add RABBITMQ_SSL_* env vars).
+# - For clustering, configure RABBITMQ_NODENAME and ensure consistent Erlang cookies.
+# - If using Swarm, run 'docker swarm init' and revert network driver to 'overlay'.
+# - Ensure rabbitmq.conf is present in the same directory as this file.
