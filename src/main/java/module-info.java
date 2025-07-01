@@ -11,7 +11,6 @@ module com.trafficmanagement.smartflow {
     requires org.slf4j;
     requires static lombok;
 
-    opens com.trafficmanagement.smartflow to javafx.fxml;
-    exports com.trafficmanagement.smartflow;
     opens com.trafficmanagement.smartflow.control to javafx.fxml;
+    exports com.trafficmanagement.smartflow;
 }
