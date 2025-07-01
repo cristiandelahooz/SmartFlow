@@ -13,4 +13,5 @@ module com.trafficmanagement.smartflow {
 
     opens com.trafficmanagement.smartflow to javafx.fxml;
     exports com.trafficmanagement.smartflow;
+    opens com.trafficmanagement.smartflow.control to javafx.fxml;
 }
