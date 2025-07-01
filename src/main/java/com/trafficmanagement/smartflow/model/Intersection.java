@@ -1,11 +1,14 @@
 package com.trafficmanagement.smartflow.model;
 
+import lombok.Getter;
+
 import java.util.concurrent.PriorityBlockingQueue;
 
+@Getter
 public class Intersection {
-    private String id;
-    private boolean rightTurnAllowed;
-    private PriorityBlockingQueue<Vehicle> vehicleQueue;
+    private final String id;
+    private final boolean rightTurnAllowed;
+    private final PriorityBlockingQueue<Vehicle> vehicleQueue;
 
     public Intersection(String id, boolean rightTurnAllowed) {
         this.id = id;
@@ -20,7 +23,4 @@ public class Intersection {
     public Vehicle getNextVehicle() {
         return vehicleQueue.poll(); // devuelve y remueve el vehículo con más prioridad
     }
-
-    public String getId() { return id; }
-    public boolean isRightTurnAllowed() { return rightTurnAllowed; }
 }
