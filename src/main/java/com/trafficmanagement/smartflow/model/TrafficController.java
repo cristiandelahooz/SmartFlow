@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,11 +15,13 @@ public class TrafficController {
     private final List<Intersection> intersections;
     private final List<TrafficLight> trafficLights;
     private final ScheduledExecutorService scheduler;
+    private final ExecutorService vehicleExecutor;
 
     public TrafficController(List<Intersection> intersections, List<TrafficLight> trafficLights) {
         this.intersections = intersections;
         this.trafficLights = trafficLights;
         this.scheduler = Executors.newScheduledThreadPool(10);
+        this.vehicleExecutor = Executors.newFixedThreadPool(10);
     }
 
     public void startControl() {
@@ -30,14 +33,17 @@ public class TrafficController {
 
     private void manageIntersections() {
         for (Intersection intersection : intersections) {
-            Vehicle nextVehicle = intersection.getNextVehicle();
-            if (nextVehicle != null) {
-                // Lógica para gestionar el cruce del vehículo
+            if (trafficLights.stream().anyMatch(TrafficLight::isGreen)) {
+                Vehicle vehicle = intersection.getNextVehicle();
+                if (vehicle != null) {
+                    vehicleExecutor.submit(vehicle);
+                }
             }
         }
     }
 
     public void stopControl() {
         scheduler.shutdown();
+        vehicleExecutor.shutdown();
     }
 }
