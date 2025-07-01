@@ -8,6 +8,7 @@ module com.trafficmanagement.smartflow {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires static lombok;
 
     opens com.trafficmanagement.smartflow to javafx.fxml;
     exports com.trafficmanagement.smartflow;
