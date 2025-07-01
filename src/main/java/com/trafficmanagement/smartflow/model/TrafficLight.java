@@ -1,10 +1,17 @@
 package com.trafficmanagement.smartflow.model;
 
+import lombok.Getter;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Clase que representa un semáforo en una intersección.
+ * Cada semáforo tiene un identificador y un estado (verde o rojo).
+ */
+@Getter
 public class TrafficLight {
-    private String id;
-    private AtomicBoolean green;
+    private final String id;
+    private final AtomicBoolean green;
 
     public TrafficLight(String id) {
         this.id = id;
@@ -18,6 +25,4 @@ public class TrafficLight {
     public boolean isGreen() {
         return green.get();
     }
-
-    public String getId() { return id; }
 }
