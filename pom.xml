@@ -132,7 +132,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.trafficmanagement.smartflow/com.trafficmanagement.smartflow.HelloApplication
+                                com.trafficmanagement.smartflow/com.trafficmanagement.smartflow.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
