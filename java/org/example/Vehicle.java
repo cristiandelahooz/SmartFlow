@@ -73,9 +73,6 @@ public class Vehicle implements Comparable<Vehicle> {
 
     @Override
     public int compareTo(Vehicle other) {
-        if (this.priority != other.priority) {
-            return Integer.compare(this.priority, other.priority);
-        }
         return Long.compare(this.arrivalTime, other.arrivalTime);
     }
 

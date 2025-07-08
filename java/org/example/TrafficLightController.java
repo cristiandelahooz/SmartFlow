@@ -20,12 +20,7 @@ public class TrafficLightController {
     public void startControl() {
         if (running) return;
         running = true;
-
-        // Configurar luces iniciales
-        updateTrafficLights();
-
-        // Cambiar luces cada 8 segundos
-        scheduler.scheduleAtFixedRate(this::switchLights, 8, 8, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::controlCycle, 0, 1, TimeUnit.SECONDS);
         System.out.println("Traffic Light Controller started");
     }
 
@@ -39,6 +34,30 @@ public class TrafficLightController {
         northSouthGreen = !northSouthGreen;
         updateTrafficLights();
     }
+
+    private void controlCycle() {
+        // 1. ¿Hay una ambulancia esperando en alguna calle?
+        String emergencyDir = intersection.getEmergencyDirection();
+        if (emergencyDir != null) {
+            // Override: esa calle en verde, las demás en rojo
+            intersection.getStreets().keySet().forEach(dir ->
+                    intersection.setTrafficLights(dir, dir.equals(emergencyDir))
+            );
+            System.out.println("EMERGENCY override: " + emergencyDir + " stays GREEN");
+            return;
+        }
+
+        // 2. Si no hay emergencia, alternamos cada 8 segundos
+        long now = System.currentTimeMillis();
+        // Usamos el mismo CHANGE_INTERVAL de antes (8 000 ms)
+        if (now - lastSwitchTime >= 8000) {
+            northSouthGreen = !northSouthGreen;
+            lastSwitchTime = now;
+            updateTrafficLights();
+        }
+    }
+
+    private long lastSwitchTime = System.currentTimeMillis();
 
     private void updateTrafficLights() {
         if (northSouthGreen) {

@@ -18,6 +18,10 @@ public class Street {
         this.greenLight = true; // Inicia en verde
     }
 
+    public Vehicle peekNextVehicle() {
+        return waitingVehicles.peek();
+    }
+
     public void addVehicle(Vehicle vehicle) {
         waitingVehicles.offer(vehicle);
         vehicleCount.incrementAndGet();

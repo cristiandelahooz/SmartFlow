@@ -29,6 +29,16 @@ public class Intersection {
         streets.put("WEST", new Street("WEST"));
     }
 
+    public String getEmergencyDirection() {
+        for (Map.Entry<String, Street> entry : streets.entrySet()) {
+            Vehicle next = entry.getValue().peekNextVehicle();
+            if (next != null && "EMERGENCY".equals(next.getType())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     public void addVehicle(Vehicle vehicle) {
         Street street = streets.get(vehicle.getFromDirection());
         if (street != null) {
