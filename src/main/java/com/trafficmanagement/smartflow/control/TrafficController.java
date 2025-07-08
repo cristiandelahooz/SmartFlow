@@ -18,31 +18,33 @@ public class TrafficController {
     private final List<TrafficLight> trafficLights;
     private final ScheduledExecutorService scheduler;
     private final ExecutorService vehicleExecutor;
-    private volatile boolean northSouthGreen = false;
+    private volatile boolean diagonalOneGreen = true;
 
     public TrafficController(Intersection intersection, List<TrafficLight> trafficLights) {
         this.intersection = intersection;
         this.trafficLights = trafficLights;
         this.scheduler = Executors.newScheduledThreadPool(10);
         this.vehicleExecutor = Executors.newFixedThreadPool(10);
+        // Set initial state
+        synchronizeLights();
     }
 
     public void startControl() {
-        scheduler.scheduleAtFixedRate(this::synchronizeLights, 0, 15, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::synchronizeLights, 15, 15, TimeUnit.SECONDS);
         scheduler.scheduleAtFixedRate(this::manageIntersection, 0, 1, TimeUnit.SECONDS);
     }
 
     private void synchronizeLights() {
-        northSouthGreen = !northSouthGreen;
+        diagonalOneGreen = !diagonalOneGreen;
 
         for (TrafficLight light : trafficLights) {
-            boolean isNorthSouth = light.getId().equals("north") || light.getId().equals("south");
-            boolean isEastWest = light.getId().equals("east") || light.getId().equals("west");
+            boolean isDiagonalOne = light.getId().equals("northWest") || light.getId().equals("southEast");
+            boolean isDiagonalTwo = light.getId().equals("northEast") || light.getId().equals("southWest");
 
-            if (isNorthSouth) {
-                light.greenProperty().set(northSouthGreen);
-            } else if (isEastWest) {
-                light.greenProperty().set(!northSouthGreen);
+            if (isDiagonalOne) {
+                light.greenProperty().set(diagonalOneGreen);
+            } else if (isDiagonalTwo) {
+                light.greenProperty().set(!diagonalOneGreen);
             }
         }
     }
