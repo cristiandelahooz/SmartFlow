@@ -1,8 +1,8 @@
 package com.trafficmanagement.smartflow.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Getter;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Clase que representa un semáforo en una intersección.
@@ -10,12 +10,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Getter
 public class TrafficLight {
+    public static final int MAX_GREEN_TIME = 2;
     private final String id;
-    private final AtomicBoolean green;
+    private final BooleanProperty green;
 
     public TrafficLight(String id) {
         this.id = id;
-        this.green = new AtomicBoolean(false); // rojo por defecto
+        this.green = new SimpleBooleanProperty(false); // rojo por defecto
     }
 
     public void changeLight() {
@@ -24,5 +25,9 @@ public class TrafficLight {
 
     public boolean isGreen() {
         return green.get();
+    }
+
+    public BooleanProperty greenProperty() {
+        return green;
     }
 }
