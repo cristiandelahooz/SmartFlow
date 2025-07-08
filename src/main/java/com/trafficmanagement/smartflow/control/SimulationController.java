@@ -28,6 +28,25 @@ public class SimulationController {
 
     private Intersection intersection;
 
+    // Instance variables for road dimensions
+    private double roadWidth = 160.0;
+    private double paneWidth;
+    private double paneHeight;
+    private double center_x;
+    private double center_y;
+    private double road_half_width;
+    private double lane_center_offset;
+    private double x_inner_left_lane;
+    private double x_inner_right_lane;
+    private double y_inner_top_lane;
+    private double y_inner_bottom_lane;
+    private double x_intersection_left;
+    private double x_intersection_right;
+    private double y_intersection_top;
+    private double y_intersection_bottom;
+    private double y_east_left_lane;
+    private double y_west_right_lane;
+
     @FXML
     public void initialize() {
         List<TrafficLight> trafficLights;
@@ -47,9 +66,28 @@ public class SimulationController {
 
     private void drawIntersection(List<TrafficLight> trafficLights) {
         simulationPane.getChildren().clear();
-        final double roadWidth = 160.0;
-        final double paneWidth = simulationPane.getWidth();
-        final double paneHeight = simulationPane.getHeight();
+        paneWidth = simulationPane.getWidth();
+        paneHeight = simulationPane.getHeight();
+
+        center_x = paneWidth / 2;
+        center_y = paneHeight / 2;
+        road_half_width = roadWidth / 2; // 80
+        lane_center_offset = roadWidth / 4; // 40
+
+        // Lane center coordinates within the intersection
+        x_inner_left_lane = center_x - lane_center_offset;
+        x_inner_right_lane = center_x + lane_center_offset;
+        y_inner_top_lane = center_y - lane_center_offset;
+        y_inner_bottom_lane = center_y + lane_center_offset;
+
+        // Intersection boundaries (for turns)
+        x_intersection_left = center_x - road_half_width;
+        x_intersection_right = center_x + road_half_width;
+        y_intersection_top = center_y - road_half_width;
+        y_intersection_bottom = center_y + road_half_width;
+
+        y_east_left_lane = center_y - lane_center_offset; // Left lane for E->W, E->N, E->S (exit lane for N-E, S-E)
+        y_west_right_lane = center_y + lane_center_offset; // Right lane for W->E, W->N, W->S (exit lane for N-W, S-W)
 
         Rectangle hRoad = new Rectangle(0, (paneHeight / 2) - (roadWidth / 2), paneWidth, roadWidth);
         hRoad.setFill(Color.DARKGRAY);
@@ -124,54 +162,86 @@ public class SimulationController {
         vehicleShape.setId(vehicle.getId());
 
         Path path = new Path();
-        String[] directions = vehicle.getDirection().split("-");
-        double startX = 0;
-        double startY = 0;
-        double endX = 0;
-        double endY = 0;
-        double paneWidth = simulationPane.getWidth();
-        double paneHeight = simulationPane.getHeight();
 
-        switch (directions[0]) {
-            case "N":
-                startX = paneWidth / 2 - 40;
-                startY = 0;
+        // Lane center coordinates at intersection edges
+        final double x_north_entry = center_x + lane_center_offset; // Right lane for N->S, N->E, N->W
+        final double x_south_entry = center_x - lane_center_offset; // Right lane for S->N, S->W, S->E
+        final double y_east_entry = center_y + lane_center_offset; // Right lane for E->W, E->N, E->S
+        final double y_west_entry = center_y - lane_center_offset; // Right lane for W->E, W->N, W->S
+
+        switch (vehicle.getDirection()) {
+            case "N-S": // North to South (Straight)
+                path.getElements().add(new MoveTo(x_north_entry, 0));
+                path.getElements().add(new LineTo(x_north_entry, paneHeight));
                 break;
-            case "S":
-                startX = paneWidth / 2 + 40;
-                startY = paneHeight;
+            case "N-E": // North to East (Right Turn)
+                path.getElements().add(new MoveTo(x_north_entry, 0));
+                path.getElements().add(new LineTo(x_north_entry, y_intersection_top + lane_center_offset)); // To turn point
+                path.getElements().add(new LineTo(x_intersection_right - lane_center_offset, y_intersection_top + lane_center_offset)); // Turn
+                path.getElements().add(new LineTo(paneWidth, y_east_left_lane)); // Exit
                 break;
-            case "E":
-                startX = paneWidth;
-                startY = paneHeight / 2 - 40;
+            case "N-W": // North to West (Left Turn)
+                path.getElements().add(new MoveTo(x_north_entry, 0));
+                path.getElements().add(new LineTo(x_north_entry, y_intersection_top + lane_center_offset)); // To turn point
+                path.getElements().add(new LineTo(x_inner_left_lane, y_inner_top_lane)); // Move to center of intersection
+                path.getElements().add(new LineTo(x_inner_left_lane, y_intersection_bottom - lane_center_offset)); // Continue through intersection
+                path.getElements().add(new LineTo(0, y_west_right_lane)); // Exit
                 break;
-            case "W":
-                startX = 0;
-                startY = paneHeight / 2 + 40;
+
+            case "S-N": // South to North (Straight)
+                path.getElements().add(new MoveTo(x_south_entry, paneHeight));
+                path.getElements().add(new LineTo(x_south_entry, 0));
+                break;
+            case "S-E": // South to East (Left Turn)
+                path.getElements().add(new MoveTo(x_south_entry, paneHeight));
+                path.getElements().add(new LineTo(x_south_entry, y_intersection_bottom - lane_center_offset)); // To turn point
+                path.getElements().add(new LineTo(x_inner_right_lane, y_inner_bottom_lane)); // Move to center of intersection
+                path.getElements().add(new LineTo(x_inner_right_lane, y_intersection_top + lane_center_offset)); // Continue through intersection
+                path.getElements().add(new LineTo(paneWidth, y_east_left_lane)); // Exit
+                break;
+            case "S-W": // South to West (Right Turn)
+                path.getElements().add(new MoveTo(x_south_entry, paneHeight));
+                path.getElements().add(new LineTo(x_south_entry, y_intersection_bottom - lane_center_offset)); // To turn point
+                path.getElements().add(new LineTo(x_intersection_left + lane_center_offset, y_intersection_bottom - lane_center_offset)); // Turn
+                path.getElements().add(new LineTo(0, y_west_right_lane)); // Exit
+                break;
+
+            case "E-W": // East to West (Straight)
+                path.getElements().add(new MoveTo(paneWidth, y_east_entry));
+                path.getElements().add(new LineTo(0, y_east_entry));
+                break;
+            case "E-N": // East to North (Left Turn)
+                path.getElements().add(new MoveTo(paneWidth, y_east_entry));
+                path.getElements().add(new LineTo(x_intersection_right - lane_center_offset, y_east_entry)); // To turn point
+                path.getElements().add(new LineTo(x_inner_right_lane, y_inner_top_lane)); // Move to center of intersection
+                path.getElements().add(new LineTo(x_inner_left_lane, y_inner_top_lane)); // Continue through intersection
+                path.getElements().add(new LineTo(x_north_entry, 0)); // Exit
+                break;
+            case "E-S": // East to South (Right Turn)
+                path.getElements().add(new MoveTo(paneWidth, y_east_entry));
+                path.getElements().add(new LineTo(x_intersection_right - lane_center_offset, y_east_entry)); // To turn point
+                path.getElements().add(new LineTo(x_intersection_right - lane_center_offset, y_intersection_bottom - lane_center_offset)); // Turn
+                path.getElements().add(new LineTo(x_south_entry, paneHeight)); // Exit
+                break;
+
+            case "W-E": // West to East (Straight)
+                path.getElements().add(new MoveTo(0, y_west_entry));
+                path.getElements().add(new LineTo(paneWidth, y_west_entry));
+                break;
+            case "W-N": // West to North (Right Turn)
+                path.getElements().add(new MoveTo(0, y_west_entry));
+                path.getElements().add(new LineTo(x_intersection_left + lane_center_offset, y_west_entry)); // To turn point
+                path.getElements().add(new LineTo(x_intersection_left + lane_center_offset, y_intersection_top + lane_center_offset)); // Turn
+                path.getElements().add(new LineTo(x_north_entry, 0)); // Exit
+                break;
+            case "W-S": // West to South (Left Turn)
+                path.getElements().add(new MoveTo(0, y_west_entry));
+                path.getElements().add(new LineTo(x_intersection_left + lane_center_offset, y_west_entry)); // To turn point
+                path.getElements().add(new LineTo(x_inner_left_lane, y_inner_bottom_lane)); // Move to center of intersection
+                path.getElements().add(new LineTo(x_inner_right_lane, y_inner_bottom_lane)); // Continue through intersection
+                path.getElements().add(new LineTo(x_south_entry, paneHeight)); // Exit
                 break;
         }
-
-        switch (directions[1]) {
-            case "N":
-                endX = paneWidth / 2 - 40;
-                endY = 0;
-                break;
-            case "S":
-                endX = paneWidth / 2 + 40;
-                endY = paneHeight;
-                break;
-            case "E":
-                endX = paneWidth;
-                endY = paneHeight / 2 - 40;
-                break;
-            case "W":
-                endX = 0;
-                endY = paneHeight / 2 + 40;
-                break;
-        }
-
-        path.getElements().add(new MoveTo(startX, startY));
-        path.getElements().add(new LineTo(endX, endY));
 
         PathTransition pathTransition = new PathTransition();
         pathTransition.setDuration(Duration.seconds(5));
