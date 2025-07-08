@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="simulationPane" prefHeight="600.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.trafficmanagement.smartflow.control.SimulationController">
-    <!-- Intersection drawing will go here -->
-</AnchorPane>
+    <top>
+        <MenuBar>
+            <Menu text="Vehicles">
+                <MenuItem text="N-S" onAction="#onNorthSouth"/>
+                <MenuItem text="N-E" onAction="#onNorthEast"/>
+                <MenuItem text="N-W" onAction="#onNorthWest"/>
+                <MenuItem text="S-N" onAction="#onSouthNorth"/>
+                <MenuItem text="S-E" onAction="#onSouthEast"/>
+                <MenuItem text="S-W" onAction="#onSouthWest"/>
+                <MenuItem text="E-N" onAction="#onEastNorth"/>
+                <MenuItem text="E-S" onAction="#onEastSouth"/>
+                <MenuItem text="E-W" onAction="#onEastWest"/>
+                <MenuItem text="W-N" onAction="#onWestNorth"/>
+                <MenuItem text="W-S" onAction="#onWestSouth"/>
+                <MenuItem text="W-E" onAction="#onWestEast"/>
+            </Menu>
+            <Menu text="Emergency">
+                <MenuItem text="Create Emergency Vehicle"
+                          onAction="#onCreateEmergencyVehicle"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <AnchorPane fx:id="simulationPane" prefHeight="600.0" prefWidth="800.0"/>
+    </center>
+</BorderPane>
