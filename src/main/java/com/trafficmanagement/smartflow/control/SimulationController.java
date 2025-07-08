@@ -34,10 +34,10 @@ public class SimulationController {
         TrafficController trafficController;
         intersection = new Intersection("intersection1", true, 4);
         trafficLights = new ArrayList<>();
-        trafficLights.add(new TrafficLight("north"));
-        trafficLights.add(new TrafficLight("south"));
-        trafficLights.add(new TrafficLight("east"));
-        trafficLights.add(new TrafficLight("west"));
+        trafficLights.add(new TrafficLight("northWest"));
+        trafficLights.add(new TrafficLight("northEast"));
+        trafficLights.add(new TrafficLight("southWest"));
+        trafficLights.add(new TrafficLight("southEast"));
 
         trafficController = new TrafficController(intersection, trafficLights);
         trafficController.startControl();
