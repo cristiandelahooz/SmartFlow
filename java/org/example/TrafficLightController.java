@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class TrafficLightController {
     private Intersection intersection;
     private ScheduledExecutorService scheduler;
-    private boolean northSouthGreen;
+    private boolean northSouthGreen = true;
     private volatile boolean running;
 
     public TrafficLightController(Intersection intersection) {
@@ -15,6 +15,7 @@ public class TrafficLightController {
         this.scheduler = Executors.newScheduledThreadPool(1);
         this.northSouthGreen = true;
         this.running = false;
+        updateTrafficLights();
     }
 
     public void startControl() {
@@ -36,18 +37,6 @@ public class TrafficLightController {
     }
 
     private void controlCycle() {
-        // 1. ¿Hay una ambulancia esperando en alguna calle?
-        String emergencyDir = intersection.getEmergencyDirection();
-        if (emergencyDir != null) {
-            // Override: esa calle en verde, las demás en rojo
-            intersection.getStreets().keySet().forEach(dir ->
-                    intersection.setTrafficLights(dir, dir.equals(emergencyDir))
-            );
-            System.out.println("EMERGENCY override: " + emergencyDir + " stays GREEN");
-            return;
-        }
-
-        // 2. Si no hay emergencia, alternamos cada 8 segundos
         long now = System.currentTimeMillis();
         // Usamos el mismo CHANGE_INTERVAL de antes (8 000 ms)
         if (now - lastSwitchTime >= 8000) {
