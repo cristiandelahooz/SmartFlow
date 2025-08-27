@@ -1,57 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="motorway-view" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pucmm.trafficManagementSystem.controller.HighwayController">
-    
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="motorway-view" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficmanagement.smartflow.controller.MotorwayViewController">
+
     <stylesheets>
         <URL value="@../style/views/motorway-view.css" />
     </stylesheets>
 
-    <children>
-        <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        
-        <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-section">
-                    <children>
-                        <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button" />
-                        <Label styleClass="title-label" text="Control de Autopista" wrapText="true"/>
-                    </children>
-                </HBox>
-                
-                <VBox styleClass="form-section">
-                    <children>
-                        <Label text="Tipo de Vehículo" />
-                        <ComboBox fx:id="typeComboBox" maxWidth="1.7976931348623157E308" />
-                        
-                        <Label text="Dirección (Origen)" />
-                        <ComboBox fx:id="originComboBox" maxWidth="1.7976931348623157E308" />
-                        
-                        <Label text="Acción en Intersección" />
-                        <ComboBox fx:id="actionComboBox" maxWidth="1.7976931348623157E308" />
+    <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
-                        <Label text="Número de Intersección (1-4)" fx:id="intersectionLabel"/>
-                        <ComboBox fx:id="intersectionComboBox" maxWidth="1.7976931348623157E308" />
-                    </children>
-                </VBox>
-                
-                <Pane styleClass="spacer" VBox.vgrow="ALWAYS" />
-                
-                <VBox styleClass="button-section">
-                    <children>
-                        <Button fx:id="addVehicleButton" onAction="#addVehicle" styleClass="button-primary" text="AÑADIR VEHÍCULO" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
-                        <Button fx:id="addMultipleButton" onAction="#addMultipleVehicles" styleClass="button-primary" text="AÑADIR LOTE" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
-                    </children>
-                </VBox>
-            </children>
+    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-section">
+            <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button" />
+            <Label styleClass="title-label" text="Control de Autopista" wrapText="true" />
+        </HBox>
+
+        <VBox prefHeight="100" prefWidth="258.0" styleClass="form-section">
+            <Label text="Tipo de Vehículo" />
+            <ComboBox fx:id="typeComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label text="Posición de salida" />
+            <ComboBox fx:id="startPosition" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label text="Acción en Intersección" />
+            <ComboBox fx:id="actionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label fx:id="intersectionLabel" text="Número de Intersección (1-4)" />
+            <ComboBox fx:id="intersectionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" prefWidth="218.0" />
         </VBox>
-    </children>
+
+
+        <HBox styleClass="button-section">
+            <Button fx:id="addVehicleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addVehicle" prefHeight="46.0" prefWidth="165.0" styleClass="button-primary" text="Lanzar Vehículo" />
+            <Button fx:id="addMultipleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addMultipleVehicles" prefHeight="46.0" prefWidth="217.0" styleClass="button-primary" text="Lanzar Lote Aleatorio" />
+        </HBox>
+        <Pane VBox.vgrow="ALWAYS" />
+    </VBox>
 </AnchorPane>

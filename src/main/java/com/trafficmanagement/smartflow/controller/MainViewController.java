@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * @created 27/8/25 - 01:25
  */
 @Slf4j
-public class MainLayoutController {
+public class MainViewController {
   @FXML
   private void startIntersectionView(ActionEvent event) {
     ViewsHandler.changeView(ViewsHandler.INTERSECTION_VIEW);

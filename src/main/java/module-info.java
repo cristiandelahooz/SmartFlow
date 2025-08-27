@@ -12,6 +12,8 @@ module com.trafficmanagement.smartflow {
     requires static lombok;
     requires javafx.base;
     requires javafx.graphics;
+    requires org.kordamp.ikonli.fontawesome5;
+    requires org.kordamp.ikonli.javafx;
 
     opens com.trafficmanagement.smartflow.controller to javafx.fxml;
     exports com.trafficmanagement.smartflow;

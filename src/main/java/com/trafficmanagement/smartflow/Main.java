@@ -16,7 +16,7 @@ public class Main extends Application {
         stage.setTitle("SmartFlow Traffic Simulation");
         stage.setScene(ViewsHandler.getScene());
 
-        stage.setMaximized(true);
+        stage.setFullScreen(true);
         stage.setResizable(false);
 
         stage.setOnCloseRequest(e -> {

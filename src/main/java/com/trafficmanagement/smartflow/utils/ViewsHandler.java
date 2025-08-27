@@ -1,7 +1,7 @@
 package com.trafficmanagement.smartflow.utils;
 
-import com.trafficmanagement.smartflow.Main;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import lombok.Getter;
@@ -13,12 +13,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ViewsHandler {
-  public static final String MAIN_LAYOUT = "MainView";
+  public static final String MAIN_VIEW = "MainView";
   public static final String INTERSECTION_VIEW = "IntersectionView";
   public static final String MOTORWAY_VIEW = "MotorwayView";
 
+  private static final Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getBounds();
+
   @Getter
-  private static final Scene scene = new Scene(loadView(MAIN_LAYOUT), 800, 600);
+  private static final Scene scene =
+      new Scene(loadView(MAIN_VIEW), screenBounds.getWidth(), screenBounds.getHeight());
 
   private ViewsHandler() {
     // it's not required
@@ -32,7 +35,8 @@ public class ViewsHandler {
   }
 
   private static Parent loadView(String viewName) {
-    FXMLLoader loader = new FXMLLoader(ViewsHandler.class.getResource("/fxml/" + viewName + ".fxml"));
+    FXMLLoader loader =
+        new FXMLLoader(ViewsHandler.class.getResource("/fxml/" + viewName + ".fxml"));
     try {
       return loader.load();
     } catch (Exception ex) {

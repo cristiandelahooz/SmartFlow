@@ -47,7 +47,7 @@
 .motorway-view .combo-box {
     -fx-min-width: 200;
     -fx-pref-width: 200;
-    -fx-max-width: 1.7976931348623157E308;
+    -fx-pref-height: 25;
 }
 
 .motorway-view .button-section {
@@ -61,11 +61,10 @@
     -fx-padding: 14 20 14 20;
     -fx-min-width: 200;
     -fx-pref-width: 200;
-    -fx-max-width: 1.7976931348623157E308;
 }
 
 .motorway-view .simulation-pane {
-    -fx-background-color: #1F2937;
+    -fx-background-color: #4a9a9621;
     -fx-border-color: #D1D5DB;
     -fx-border-width: 2 0 0 0;
 }
@@ -89,7 +88,6 @@
 .motorway-view .spacer {
     -fx-min-height: 1;
     -fx-pref-height: 1;
-    -fx-max-height: 1.7976931348623157E308;
 }
 
 .motorway-view .lane-marker {

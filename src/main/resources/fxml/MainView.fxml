@@ -3,14 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="32.0" styleClass="main-view"
       xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.trafficmanagement.smartflow.controller.MainLayoutController">
+      fx:controller="com.trafficmanagement.smartflow.controller.MainViewController">
 
     <stylesheets>
         <URL value="@../style/views/main-view.css"/>
@@ -22,31 +20,31 @@
 
     <VBox alignment="CENTER" spacing="16.0">
         <Label styleClass="title-label" text="Smart Flow"/>
-        <Text fx:id="subtitleText" 
-              fill="#6B7280" 
-              text="Sistema de Gestión Inteligente de Tráfico" 
+        <Text fx:id="subtitleText"
+              fill="#6B7280"
+              text="Sistema de Gestión Inteligente de Tráfico"
               style="-fx-font-size: 18px; -fx-font-weight: normal;"/>
     </VBox>
 
     <VBox styleClass="control-panel" alignment="CENTER" spacing="24.0">
-        <Label text="Selecciona una Simulación" 
+        <Label text="Selecciona una Simulación"
                style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #111827; -fx-padding: 0 0 16 0;"/>
-        
+
         <VBox spacing="16.0" alignment="CENTER">
             <VBox spacing="8.0" alignment="CENTER">
-                <Button onAction="#startIntersectionView" styleClass="button-primary" 
+                <Button onAction="#startIntersectionView" styleClass="button-primary"
                         text="Simular Intersección" fx:id="intersectionButton"/>
-                <Text fill="#6B7280" text="Modelado de intersecciones urbanas con control de tráfico" 
+                <Text fill="#6B7280" text="Modelado de intersecciones urbanas con control de tráfico"
                       textAlignment="CENTER" wrappingWidth="280.0"
                       style="-fx-font-size: 13px;"/>
             </VBox>
-            
+
             <Region prefHeight="8.0"/>
-            
+
             <VBox spacing="8.0" alignment="CENTER">
-                <Button onAction="#startMotorwayView" styleClass="button-primary" 
+                <Button onAction="#startMotorwayView" styleClass="button-primary"
                         text="Simular Autopista" fx:id="motorwayButton"/>
-                <Text fill="#6B7280" text="Simulación de flujo vehicular en carreteras de alta velocidad" 
+                <Text fill="#6B7280" text="Simulación de flujo vehicular en carreteras de alta velocidad"
                       textAlignment="CENTER" wrappingWidth="280.0"
                       style="-fx-font-size: 13px;"/>
             </VBox>
