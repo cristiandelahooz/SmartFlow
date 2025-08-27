@@ -292,7 +292,7 @@ public class MotorwayViewController {
     disableVehicleCreationButtonsTemporarily();
     final int numVehicles = 15;
     final Random random = new Random();
-    VehicleMovement[] movements = VehicleMovement.getAllTurnMovements();
+    VehicleMovement[] movements = VehicleMovement.getAllMovements();
     log.info("batch_vehicle_creation_started count={} simulationType=motorway", numVehicles);
     new Thread(
             () -> {
@@ -388,7 +388,7 @@ public class MotorwayViewController {
     Direction lane = vehicle.getLane();
     double startY = getLaneY(origin, lane, motorwayY);
 
-    if (movement.equals(VehicleMovement.U_TURN_CONTINUATION)) {
+    if (movement.equals(VehicleMovement.STRAIGH_AFTER_U_TURN)) {
       Point2D start = new Point2D(vehicle.getX(), vehicle.getY());
       Point2D end =
           new Point2D(origin == Direction.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
@@ -584,7 +584,7 @@ public class MotorwayViewController {
 
     Vehicle straightVehicle =
         new Vehicle(
-            type, newOrigin, VehicleMovement.U_TURN_CONTINUATION, (MotorwayIntersection) null);
+            type, newOrigin, VehicleMovement.STRAIGH_AFTER_U_TURN, (MotorwayIntersection) null);
 
     straightVehicle.setLane(lane);
     straightVehicle.setController(this);

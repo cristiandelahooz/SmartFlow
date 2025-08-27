@@ -29,7 +29,7 @@ public class Vehicle implements Runnable {
   private final VehicleMovement movement;
   private final TrafficManager trafficManager;
   private final double normalSpeed = 2;
-  private final double emergencyClearSpeed = 2.4;
+  private final double emergencyClearSpeed = 7.4;
   private volatile boolean running = true;
   private Direction lane;
   private MotorwayViewController motorwayViewController;
@@ -307,7 +307,7 @@ public class Vehicle implements Runnable {
         (getTargetIntersection() != null) ? getTargetIntersection().getId() : 0;
 
     if (origin == Direction.WEST) {
-      if (movement == VehicleMovement.STRAIGHT || movement == VehicleMovement.U_TURN_CONTINUATION) {
+      if (movement == VehicleMovement.STRAIGHT || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
         if (getX()
             < motorwayViewController.getIntersectionCenterX(
                 2, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(3);
@@ -323,7 +323,7 @@ public class Vehicle implements Runnable {
         if (finalIntersectionId >= 4) trafficLightPath.add(6);
       }
     } else {
-      if (movement == VehicleMovement.STRAIGHT  || movement == VehicleMovement.U_TURN_CONTINUATION) {
+      if (movement == VehicleMovement.STRAIGHT  || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
         if (getX()
             > motorwayViewController.getIntersectionCenterX(
                 3, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(4);

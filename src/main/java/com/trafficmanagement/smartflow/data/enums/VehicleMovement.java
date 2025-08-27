@@ -14,7 +14,7 @@ public enum VehicleMovement {
   TURN_LEFT("Doblar a la izquierda"),
   TURN_RIGHT("Doblar a la derecha"),
   U_TURN("Giro en U"),
-  U_TURN_CONTINUATION("Continuación Giro en U");
+  STRAIGH_AFTER_U_TURN("Continuación Giro en U");
 
   private final String displayName;
 
@@ -22,7 +22,7 @@ public enum VehicleMovement {
     return this == TURN_LEFT || this == TURN_RIGHT || this == U_TURN;
   }
 
-  public static VehicleMovement[] getAllTurnMovements() {
+  public static VehicleMovement[] getAllMovements() {
     return new VehicleMovement[] {STRAIGHT, TURN_LEFT, TURN_RIGHT, U_TURN};
   }
 
