@@ -80,7 +80,7 @@ public class Intersection implements TrafficManager {
         vehicle.getId(),
         vehicle.getType(),
         vehicle.getOrigin(),
-        vehicle.getDestination(),
+        vehicle.getMovement(),
         isEmergencyActive());
   }
 
@@ -92,7 +92,7 @@ public class Intersection implements TrafficManager {
         vehicle.getId(),
         vehicle.getType(),
         vehicle.getOrigin(),
-        vehicle.getDestination(),
+        vehicle.getMovement(),
         crossingVehicles.size());
   }
 

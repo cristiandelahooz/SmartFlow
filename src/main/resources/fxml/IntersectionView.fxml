@@ -35,7 +35,7 @@
             <ComboBox fx:id="originComboBox" maxWidth="1.7976931348623157E308"/>
 
             <Label text="Destino"/>
-            <ComboBox fx:id="destinationComboBox" maxWidth="1.7976931348623157E308"/>
+            <ComboBox fx:id="vehicleMovementComboBox" maxWidth="1.7976931348623157E308"/>
         </VBox>
 
         <Pane styleClass="spacer" VBox.vgrow="ALWAYS"/>

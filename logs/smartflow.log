@@ -364,3 +364,133 @@
 2025-08-27 17:35:05.173 [Thread-7] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=4 type=Normal origin=WEST movement=Continuación Giro en U
 2025-08-27 17:35:19.001 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=2 finished=true
 2025-08-27 17:35:19.494 [Thread-7] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=4 finished=true
+2025-08-27 17:50:30.955 [JavaFX Application Thread] INFO  c.t.s.c.TrafficLightController - traffic_light_controller_initialized lightCount=6 initialState=red
+2025-08-27 17:50:30.972 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - motorway_controller_initialized intersectionCount=4 simulationType=motorway
+2025-08-27 17:50:36.404 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=1 type=Normal origin=EAST movement=Giro en U targetIntersectionId=2
+2025-08-27 17:50:36.407 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=1 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:50:36.409 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=1 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:50:40.639 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=2 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:50:40.639 [Thread-4] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=1 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 17:50:40.643 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=1 finished=true
+2025-08-27 17:50:40.644 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=2 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:50:53.166 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=2 finished=true
+2025-08-27 17:51:13.236 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=3 type=Normal origin=WEST movement=Giro en U targetIntersectionId=3
+2025-08-27 17:51:13.238 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=3 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=3 simulationType=motorway
+2025-08-27 17:51:13.240 [Thread-6] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=3 type=Normal origin=WEST movement=Giro en U
+2025-08-27 17:51:29.629 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=4 type=Normal origin=EAST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:51:29.629 [Thread-6] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=3 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=3 crossingVehiclesRemaining=0
+2025-08-27 17:51:29.630 [Thread-6] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=3 finished=true
+2025-08-27 17:51:29.630 [Thread-7] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=4 type=Normal origin=EAST movement=Continuación Giro en U
+2025-08-27 17:51:42.263 [Thread-7] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=4 finished=true
+2025-08-27 17:56:54.489 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - batch_vehicle_creation_started count=15 simulationType=motorway
+2025-08-27 17:56:54.492 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=5 type=Normal origin=WEST movement=Seguir derecho targetIntersectionId=-1
+2025-08-27 17:56:54.492 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=5 type=Normal origin=WEST lane=SECOND_RAIL destination=Seguir derecho targetIntersectionId=null simulationType=motorway
+2025-08-27 17:56:54.492 [Thread-9] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=5 type=Normal origin=WEST movement=Seguir derecho
+2025-08-27 17:56:55.497 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=6 type=Normal origin=EAST movement=Giro en U targetIntersectionId=2
+2025-08-27 17:56:55.498 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=6 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:56:55.500 [Thread-10] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=6 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:56:56.499 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=7 type=Normal origin=EAST movement=Giro en U targetIntersectionId=2
+2025-08-27 17:56:56.500 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=7 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:56:56.502 [Thread-11] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=7 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:56:57.504 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=8 type=Normal origin=EAST movement=Giro en U targetIntersectionId=1
+2025-08-27 17:56:57.504 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=8 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=1 simulationType=motorway
+2025-08-27 17:56:57.504 [Thread-12] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=8 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:56:58.509 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=9 type=Normal origin=WEST movement=Seguir derecho targetIntersectionId=-1
+2025-08-27 17:56:58.510 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=9 type=Normal origin=WEST lane=SECOND_RAIL destination=Seguir derecho targetIntersectionId=null simulationType=motorway
+2025-08-27 17:56:58.511 [Thread-13] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=9 type=Normal origin=WEST movement=Seguir derecho
+2025-08-27 17:56:59.509 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=10 type=Normal origin=EAST movement=Giro en U targetIntersectionId=2
+2025-08-27 17:56:59.510 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=10 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:56:59.510 [Thread-14] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=10 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:56:59.711 [Thread-10] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=6 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 17:56:59.710 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=11 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:56:59.711 [Thread-10] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=6 finished=true
+2025-08-27 17:56:59.712 [Thread-15] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=11 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:00.515 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=12 type=Normal origin=WEST movement=Giro en U targetIntersectionId=4
+2025-08-27 17:57:00.515 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=12 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=4 simulationType=motorway
+2025-08-27 17:57:00.517 [Thread-16] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=12 type=Normal origin=WEST movement=Giro en U
+2025-08-27 17:57:00.680 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=13 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:57:00.680 [Thread-11] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=7 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 17:57:00.681 [Thread-11] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=7 finished=true
+2025-08-27 17:57:00.682 [Thread-17] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=13 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:01.518 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=14 type=Normal origin=WEST movement=Doblar a la izquierda targetIntersectionId=3
+2025-08-27 17:57:01.519 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=14 type=Normal origin=WEST lane=FIRST_RAIL destination=Doblar a la izquierda targetIntersectionId=3 simulationType=motorway
+2025-08-27 17:57:01.521 [Thread-18] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=14 type=Normal origin=WEST movement=Doblar a la izquierda
+2025-08-27 17:57:01.692 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=15 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:57:01.691 [Thread-12] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=8 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=1 crossingVehiclesRemaining=0
+2025-08-27 17:57:01.694 [Thread-12] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=8 finished=true
+2025-08-27 17:57:01.695 [Thread-19] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=15 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:02.521 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=16 type=Normal origin=WEST movement=Seguir derecho targetIntersectionId=-1
+2025-08-27 17:57:02.522 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=16 type=Normal origin=WEST lane=SECOND_RAIL destination=Seguir derecho targetIntersectionId=null simulationType=motorway
+2025-08-27 17:57:02.523 [Thread-20] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=16 type=Normal origin=WEST movement=Seguir derecho
+2025-08-27 17:57:03.527 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=17 type=Normal origin=WEST movement=Doblar a la izquierda targetIntersectionId=2
+2025-08-27 17:57:03.528 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=17 type=Normal origin=WEST lane=FIRST_RAIL destination=Doblar a la izquierda targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:57:03.530 [Thread-21] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=17 type=Normal origin=WEST movement=Doblar a la izquierda
+2025-08-27 17:57:03.661 [Thread-14] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=10 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 17:57:03.661 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=18 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:57:03.661 [Thread-14] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=10 finished=true
+2025-08-27 17:57:03.662 [Thread-22] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=18 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:04.530 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=19 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=2
+2025-08-27 17:57:04.530 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=19 type=Normal origin=WEST lane=SECOND_RAIL destination=Continuación Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 17:57:04.531 [Thread-23] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=19 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:05.533 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=20 type=Normal origin=WEST movement=Seguir derecho targetIntersectionId=-1
+2025-08-27 17:57:05.533 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=20 type=Normal origin=WEST lane=SECOND_RAIL destination=Seguir derecho targetIntersectionId=null simulationType=motorway
+2025-08-27 17:57:05.535 [Thread-24] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=20 type=Normal origin=WEST movement=Seguir derecho
+2025-08-27 17:57:06.537 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=21 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=4
+2025-08-27 17:57:06.538 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=21 type=Normal origin=WEST lane=SECOND_RAIL destination=Continuación Giro en U targetIntersectionId=4 simulationType=motorway
+2025-08-27 17:57:06.539 [Thread-25] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=21 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:07.542 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=22 type=Normal origin=WEST movement=Giro en U targetIntersectionId=3
+2025-08-27 17:57:07.543 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=22 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=3 simulationType=motorway
+2025-08-27 17:57:07.545 [Thread-26] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=22 type=Normal origin=WEST movement=Giro en U
+2025-08-27 17:57:08.541 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=23 type=Normal origin=EAST movement=Giro en U targetIntersectionId=1
+2025-08-27 17:57:08.542 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=23 type=Normal origin=EAST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=1 simulationType=motorway
+2025-08-27 17:57:08.542 [Thread-27] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=23 type=Normal origin=EAST movement=Giro en U
+2025-08-27 17:57:09.546 [Thread-8] INFO  c.t.s.c.MotorwayViewController - batch_vehicle_creation_completed count=15 simulationType=motorway
+2025-08-27 17:57:12.678 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=24 type=Normal origin=WEST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:57:12.678 [Thread-27] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=23 type=Normal origin=EAST lane=FIRST_RAIL intersectionId=1 crossingVehiclesRemaining=0
+2025-08-27 17:57:12.680 [Thread-27] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=23 finished=true
+2025-08-27 17:57:12.680 [Thread-28] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=24 type=Normal origin=WEST movement=Continuación Giro en U
+2025-08-27 17:57:13.044 [Thread-9] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=5 finished=true
+2025-08-27 17:57:13.479 [Thread-21] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=17 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 17:57:13.480 [Thread-21] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=17 finished=true
+2025-08-27 17:57:13.506 [Thread-13] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=9 finished=true
+2025-08-27 17:57:13.986 [Thread-15] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=11 finished=true
+2025-08-27 17:57:14.291 [Thread-18] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=14 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=3 crossingVehiclesRemaining=0
+2025-08-27 17:57:14.292 [Thread-18] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=14 finished=true
+2025-08-27 17:57:14.458 [Thread-17] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=13 finished=true
+2025-08-27 17:57:14.797 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=25 type=Normal origin=EAST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 17:57:14.797 [Thread-16] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=12 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=4 crossingVehiclesRemaining=0
+2025-08-27 17:57:14.798 [Thread-16] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=12 finished=true
+2025-08-27 17:57:14.798 [Thread-29] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=25 type=Normal origin=EAST movement=Continuación Giro en U
+2025-08-27 17:57:14.934 [Thread-19] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=15 finished=true
+2025-08-27 17:57:15.426 [Thread-20] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=16 finished=true
+2025-08-27 17:57:16.174 [Thread-22] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=18 finished=true
+2025-08-27 18:37:45.580 [JavaFX Application Thread] INFO  c.t.s.c.TrafficLightController - traffic_light_controller_initialized lightCount=6 initialState=red
+2025-08-27 18:37:45.596 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - motorway_controller_initialized intersectionCount=4 simulationType=motorway
+2025-08-27 18:37:49.943 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=1 type=Normal origin=WEST movement=Giro en U targetIntersectionId=2
+2025-08-27 18:37:49.944 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 18:37:49.945 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=1 type=Normal origin=WEST movement=Giro en U
+2025-08-27 18:38:04.388 [Thread-4] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 18:38:04.388 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 18:38:04.389 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U
+2025-08-27 18:38:04.390 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=1 finished=true
+2025-08-27 18:38:16.999 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=2 finished=true
+2025-08-27 18:44:58.983 [JavaFX Application Thread] INFO  c.t.s.c.TrafficLightController - traffic_light_controller_initialized lightCount=6 initialState=red
+2025-08-27 18:44:59.001 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - motorway_controller_initialized intersectionCount=4 simulationType=motorway
+2025-08-27 18:45:02.113 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=1 type=Normal origin=WEST movement=Giro en U targetIntersectionId=2
+2025-08-27 18:45:02.113 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 18:45:02.114 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=1 type=Normal origin=WEST movement=Giro en U
+2025-08-27 18:45:10.053 [Thread-4] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 18:45:10.053 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 18:45:10.055 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U
+2025-08-27 18:45:10.056 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=1 finished=true
+2025-08-27 18:45:21.087 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=2 finished=true
+2025-08-27 18:47:35.466 [JavaFX Application Thread] INFO  c.t.s.c.TrafficLightController - traffic_light_controller_initialized lightCount=6 initialState=red
+2025-08-27 18:47:35.506 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - motorway_controller_initialized intersectionCount=4 simulationType=motorway
+2025-08-27 18:47:39.213 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=1 type=Normal origin=WEST movement=Giro en U targetIntersectionId=2
+2025-08-27 18:47:39.213 [JavaFX Application Thread] INFO  c.t.s.c.MotorwayViewController - vehicle_created vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL destination=Giro en U targetIntersectionId=2 simulationType=motorway
+2025-08-27 18:47:39.214 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=1 type=Normal origin=WEST movement=Giro en U
+2025-08-27 18:47:47.934 [JavaFX Application Thread] INFO  c.t.smartflow.data.model.Vehicle - vehicle_created vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U targetIntersectionId=-1
+2025-08-27 18:47:47.934 [Thread-4] INFO  c.t.s.d.model.MotorwayIntersection - vehicle_crossing_completed vehicleId=1 type=Normal origin=WEST lane=FIRST_RAIL intersectionId=2 crossingVehiclesRemaining=0
+2025-08-27 18:47:47.936 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_started vehicleId=2 type=Normal origin=EAST movement=Continuación Giro en U
+2025-08-27 18:47:47.937 [Thread-4] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=1 finished=true
+2025-08-27 18:47:57.571 [Thread-5] INFO  c.t.smartflow.data.model.Vehicle - vehicle_thread_completed vehicleId=2 finished=true

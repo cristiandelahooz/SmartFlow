@@ -8,7 +8,9 @@ import com.trafficmanagement.smartflow.controller.MotorwayViewController;
 import com.trafficmanagement.smartflow.controller.IntersectionViewController;
 import com.trafficmanagement.smartflow.controller.TrafficLightController;
 import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
+import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import lombok.Getter;
@@ -24,7 +26,7 @@ public class Vehicle implements Runnable {
   private final int id;
   private final VehicleType type;
   private final Direction origin;
-  private final Direction destination;
+  private final VehicleMovement movement;
   private final TrafficManager trafficManager;
   private final double normalSpeed = 2;
   private final double emergencyClearSpeed = 2.4;
@@ -44,36 +46,36 @@ public class Vehicle implements Runnable {
   private IntersectionStateManager intersectionStateManager;
 
   public Vehicle(
-      VehicleType type, Direction origin, Direction destination, Intersection intersection) {
+      VehicleType type, Direction origin, VehicleMovement movement, Intersection intersection) {
     this.id = idCounter.incrementAndGet();
     this.type = type;
     this.origin = origin;
-    this.destination = destination;
+    this.movement = movement;
     this.trafficManager = intersection;
-    log.info("vehicle_created vehicleId={} type={} origin={} destination={} intersectionId={}", 
-        id, type, origin, destination, intersection.getId());
+    log.info("vehicle_created vehicleId={} type={} origin={} movement={} intersectionId={}",
+        id, type, origin, movement, intersection.getId());
   }
 
   public Vehicle(
       VehicleType type,
       Direction origin,
-      Direction action,
+      VehicleMovement movement,
       MotorwayIntersection targetIntersection) {
     this.id = idCounter.incrementAndGet();
     this.type = type;
     this.origin = origin;
-    this.destination = action;
+    this.movement = movement;
     this.trafficManager = targetIntersection;
-    log.info("vehicle_created vehicleId={} type={} origin={} destination={} targetIntersectionId={}", 
-        id, type, origin, action, targetIntersection != null ? targetIntersection.getId(): -1);
+    log.info("vehicle_created vehicleId={} type={} origin={} movement={} targetIntersectionId={}",
+        id, type, origin, movement, targetIntersection != null ? targetIntersection.getId(): -1);
   }
 
   @Override
   public void run() {
     if (isFinished()) return;
     
-    log.info("vehicle_thread_started vehicleId={} type={} origin={} destination={}", 
-        id, type, origin, destination);
+    log.info("vehicle_thread_started vehicleId={} type={} origin={} movement={}",
+        id, type, origin, movement);
 
     try {
       if (intersectionViewController != null) {
@@ -189,7 +191,7 @@ public class Vehicle implements Runnable {
             if (this.type == VehicleType.EMERGENCY) {
               canGo = true;
               log.debug("emergency_vehicle_override vehicleId={} lightId={} canGo=true", id, lightId);
-              if ((destination == Direction.LEFT || destination == Direction.U_TURN)
+              if ((movement == VehicleMovement.TURN_LEFT || movement == VehicleMovement.U_TURN)
                   && isAtFinalTurn(lightId)) {
                 if (intersectionStateManager.isOpposingTrafficCrossing(
                     getTargetIntersection().getId(), this)) {
@@ -207,7 +209,7 @@ public class Vehicle implements Runnable {
                 }
               }
               if (canGo
-                  && (destination == Direction.LEFT || destination == Direction.U_TURN)
+                  && (movement == VehicleMovement.TURN_LEFT || movement == VehicleMovement.U_TURN)
                   && isAtFinalTurn(lightId)) {
                 if (intersectionStateManager.isOpposingTrafficCrossing(
                     getTargetIntersection().getId(), this)) {
@@ -236,7 +238,7 @@ public class Vehicle implements Runnable {
         Thread.sleep(16);
       }
 
-      if (running && this.destination == Direction.U_TURN) {
+      if (running && this.movement == VehicleMovement.U_TURN) {
         final Vehicle self = this;
         Platform.runLater(() -> motorwayViewController.spawnStraightVehicleFromUTurn(self));
       }
@@ -287,7 +289,7 @@ public class Vehicle implements Runnable {
     for (int ind = 1; ind <= 4; ind++) {
       double centerX =
           motorwayViewController.getIntersectionCenterX(ind, motorwayViewController.getSimulationPaneWidth());
-      double width = motorwayViewController.getIntersectionWidth();
+      double width = MotorwayConstants.INTERSECTION_WIDTH;
       if (this.x > centerX - width / 2 && this.x < centerX + width / 2) {
         return ind;
       }
@@ -305,7 +307,7 @@ public class Vehicle implements Runnable {
         (getTargetIntersection() != null) ? getTargetIntersection().getId() : 0;
 
     if (origin == Direction.WEST) {
-      if (destination == Direction.STRAIGHT || destination == Direction.U_TURN_CONTINUATION) {
+      if (movement == VehicleMovement.STRAIGHT || movement == VehicleMovement.U_TURN_CONTINUATION) {
         if (getX()
             < motorwayViewController.getIntersectionCenterX(
                 2, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(3);
@@ -321,7 +323,7 @@ public class Vehicle implements Runnable {
         if (finalIntersectionId >= 4) trafficLightPath.add(6);
       }
     } else {
-      if (destination == Direction.STRAIGHT || destination == Direction.U_TURN_CONTINUATION) {
+      if (movement == VehicleMovement.STRAIGHT  || movement == VehicleMovement.U_TURN_CONTINUATION) {
         if (getX()
             > motorwayViewController.getIntersectionCenterX(
                 3, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(4);
@@ -343,7 +345,7 @@ public class Vehicle implements Runnable {
     if (motorwayViewController != null) {
       return motorwayViewController.calculateVehiclePath(this);
     } else if (intersectionViewController != null) {
-      return intersectionViewController.getPath(origin, destination);
+      return intersectionViewController.getPath(origin, movement);
     }
     return new ArrayList<>();
   }

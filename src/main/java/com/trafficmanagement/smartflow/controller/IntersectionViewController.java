@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.Intersection;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
@@ -42,7 +43,7 @@ public class IntersectionViewController {
     @FXML
     private ComboBox<Direction> originComboBox;
     @FXML
-    private ComboBox<Direction> destinationComboBox;
+    private ComboBox<VehicleMovement> vehicleMovementComboBox;
     @FXML
     private Button addVehicleButton;
     @FXML
@@ -80,10 +81,10 @@ public class IntersectionViewController {
 
         typeComboBox.getItems().setAll(VehicleType.values());
         originComboBox.getItems().setAll(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
-        destinationComboBox.getItems().setAll(Direction.STRAIGHT, Direction.RIGHT, Direction.LEFT, Direction.U_TURN);
+        vehicleMovementComboBox.getItems().setAll(VehicleMovement.values());
         typeComboBox.getSelectionModel().selectFirst();
         originComboBox.getSelectionModel().selectFirst();
-        destinationComboBox.getSelectionModel().selectFirst();
+        vehicleMovementComboBox.getSelectionModel().selectFirst();
         FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_LEFT);
         backButton.setGraphic(backIcon);
 
@@ -164,12 +165,12 @@ public class IntersectionViewController {
         createAndStartVehicle(
                 typeComboBox.getValue(),
                 originComboBox.getValue(),
-                destinationComboBox.getValue());
+                vehicleMovementComboBox.getValue());
     }
 
-    private void createAndStartVehicle(VehicleType type, Direction origin, Direction destination) {
+    private void createAndStartVehicle(VehicleType type, Direction origin, VehicleMovement movement) {
         // 1. Crea el objeto lógico del vehículo
-        Vehicle vehicle = new Vehicle(type, origin, destination, intersection);
+        Vehicle vehicle = new Vehicle(type, origin, movement, intersection);
         vehicle.setController(this);
 
         // 2. Crea su representación visual
@@ -178,11 +179,11 @@ public class IntersectionViewController {
         vehicleCircle.setStroke(Color.BLACK);
 
         // 3. Obtiene su ruta y posición inicial
-        List<Point2D> path = getPath(origin, destination);
+        List<Point2D> path = getPath(origin, movement);
         if (path.isEmpty())
             return; // No crea el vehículo si no hay una ruta válida
 
-        Point2D startPos = path.get(0);
+        Point2D startPos = path.getFirst();
         vehicle.setPosition(startPos.getX(), startPos.getY());
 
         // 4. Lo añade a las colecciones y a la pantalla
@@ -204,18 +205,16 @@ public class IntersectionViewController {
         new Thread(() -> {
             try {
                 Direction[] origins = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
-                Direction[] destinations = { Direction.STRAIGHT, Direction.LEFT, Direction.RIGHT, Direction.U_TURN };
+                VehicleMovement[] movements = VehicleMovement.values();
 
                 for (int ind = 0; ind < numberOfVehiclesToAdd; ind++) {
                     // Genera propiedades aleatorias para el nuevo vehículo
                     Direction randomOrigin = origins[random.nextInt(origins.length)];
-                    Direction randomDestination = destinations[random.nextInt(destinations.length)];
+                    VehicleMovement randomDestination = movements[random.nextInt(movements.length)];
 
                     VehicleType randomType = (random.nextInt(200) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
 
-                    Platform.runLater(() -> {
-                        createAndStartVehicle(randomType, randomOrigin, randomDestination);
-                    });
+                    Platform.runLater(() -> createAndStartVehicle(randomType, randomOrigin, randomDestination));
 
                     Thread.sleep(1000);
                 }
@@ -259,7 +258,7 @@ public class IntersectionViewController {
         pause.play();
     }
 
-    public List<Point2D> getPath(Direction origin, Direction destination) {
+    public List<Point2D> getPath(Direction origin, VehicleMovement movement) {
         double width = simulationPane.getWidth();
         double height = simulationPane.getHeight();
         if (width == 0 || height == 0)
@@ -289,7 +288,7 @@ public class IntersectionViewController {
         Point2D exitS = new Point2D(S_OUT_X, height + 50);
         Point2D exitE = new Point2D(width + 50, E_OUT_Y);
         Point2D exitW = new Point2D(-50, W_OUT_Y);
-        if (destination == Direction.U_TURN) {
+        if (movement.equals(VehicleMovement.U_TURN)) {
             switch (origin) {
                 case NORTH:
                     return List.of(new Point2D(N_IN_X, -50), stopN, new Point2D(N_OUT_X, stopN.getY() + STOP_GAP),
@@ -312,12 +311,12 @@ public class IntersectionViewController {
             case NORTH:
                 Point2D startN = new Point2D(N_IN_X, -50);
                 Point2D enterN = new Point2D(N_IN_X, stopN.getY() + STOP_GAP);
-                switch (destination) {
+                switch (movement) {
                     case STRAIGHT:
                         return List.of(startN, stopN, new Point2D(N_IN_X, stopS.getY()), exitS);
-                    case RIGHT:
+                case TURN_RIGHT:
                         return List.of(startN, stopN, enterN, new Point2D(stopW.getX(), W_OUT_Y), exitW);
-                    case LEFT:
+                case TURN_LEFT:
                         return List.of(startN, stopN, new Point2D(N_IN_X, E_OUT_Y), new Point2D(stopE.getX(), E_OUT_Y),
                                 exitE);
                     default:
@@ -327,12 +326,12 @@ public class IntersectionViewController {
             case SOUTH:
                 Point2D startS = new Point2D(S_IN_X, height + 50);
                 Point2D enterS = new Point2D(S_IN_X, stopS.getY() - STOP_GAP);
-                switch (destination) {
+                switch (movement) {
                     case STRAIGHT:
                         return List.of(startS, stopS, new Point2D(S_IN_X, stopN.getY()), exitN);
-                    case RIGHT:
+                case TURN_RIGHT:
                         return List.of(startS, stopS, enterS, new Point2D(stopE.getX(), E_OUT_Y), exitE);
-                    case LEFT:
+                case TURN_LEFT:
                         return List.of(startS, stopS, new Point2D(S_IN_X, W_OUT_Y), new Point2D(stopW.getX(), W_OUT_Y),
                                 exitW);
                     default:
@@ -342,13 +341,13 @@ public class IntersectionViewController {
             case EAST:
                 Point2D startE = new Point2D(width + 50, E_IN_Y);
                 Point2D enterE = new Point2D(stopE.getX() - STOP_GAP, E_IN_Y);
-                switch (destination) {
+                switch (movement) {
                     case STRAIGHT:
                         return List.of(startE, stopE, new Point2D(stopW.getX(), E_IN_Y), exitW);
-                    case RIGHT:
+                case TURN_RIGHT:
                         return List.of(startE, stopE, new Point2D(N_OUT_X, E_IN_Y), new Point2D(N_OUT_X, stopN.getY()),
                                 exitN);
-                    case LEFT:
+                case TURN_LEFT:
 
                         return List.of(startE, stopE, enterE, new Point2D(S_OUT_X, stopS.getY()), exitS);
                     default:
@@ -358,14 +357,13 @@ public class IntersectionViewController {
             case WEST:
                 Point2D startW = new Point2D(-50, W_IN_Y);
                 Point2D enterW = new Point2D(stopW.getX() + STOP_GAP, W_IN_Y);
-                switch (destination) {
+                switch (movement) {
                     case STRAIGHT:
                         return List.of(startW, stopW, new Point2D(stopE.getX(), W_IN_Y), exitE);
-                    case RIGHT:
+                case TURN_RIGHT:
                         return List.of(startW, stopW, new Point2D(S_OUT_X, W_IN_Y), new Point2D(S_OUT_X, stopS.getY()),
                                 exitS);
-                    case LEFT:
-
+                case TURN_LEFT:
                         return List.of(startW, stopW, enterW, new Point2D(N_OUT_X, stopN.getY()), exitN);
                     default:
                         break;

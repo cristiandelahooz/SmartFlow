@@ -20,13 +20,13 @@
 
         <VBox prefHeight="100" prefWidth="258.0" styleClass="form-section">
             <Label text="Tipo de Vehículo" />
-            <ComboBox fx:id="typeComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+            <ComboBox fx:id="vehicleTypeComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
 
             <Label text="Posición de salida" />
             <ComboBox fx:id="startPosition" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
 
             <Label text="Acción en Intersección" />
-            <ComboBox fx:id="actionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+            <ComboBox fx:id="movementComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
 
             <Label fx:id="intersectionLabel" text="Número de Intersección (1-4)" />
             <ComboBox fx:id="intersectionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" prefWidth="218.0" />
