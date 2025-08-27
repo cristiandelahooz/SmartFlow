@@ -10,7 +10,9 @@ module com.trafficmanagement.smartflow {
     requires eu.hansolo.tilesfx;
     requires org.slf4j;
     requires static lombok;
+    requires javafx.base;
+    requires javafx.graphics;
 
-    opens com.trafficmanagement.smartflow.control to javafx.fxml;
+    opens com.trafficmanagement.smartflow.controller to javafx.fxml;
     exports com.trafficmanagement.smartflow;
 }
