@@ -33,6 +33,8 @@ import javafx.util.Duration;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import lombok.extern.slf4j.Slf4j;
+import static com.trafficmanagement.smartflow.utils.IntersectionConstants.*;
+import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 
 @Slf4j
 public class IntersectionViewController {
@@ -102,60 +104,60 @@ public class IntersectionViewController {
         if (width == 0 || height == 0)
             return;
 
-        double streetWidth = Math.min(width, height) / 4.0;
+        double streetWidth = Math.min(width, height) / STREET_WIDTH_DIVISOR;
 
         Rectangle hStreet = new Rectangle(0, height / 2 - streetWidth / 2, width, streetWidth);
         Rectangle vStreet = new Rectangle(width / 2 - streetWidth / 2, 0, streetWidth, height);
-        hStreet.setFill(Color.GRAY);
-        vStreet.setFill(Color.GRAY);
-        hStreet.setStroke(Color.DARKGRAY);
-        vStreet.setStroke(Color.DARKGRAY);
+        hStreet.setFill(STREET_COLOR);
+        vStreet.setFill(STREET_COLOR);
+        hStreet.setStroke(STREET_STROKE_COLOR);
+        vStreet.setStroke(STREET_STROKE_COLOR);
         streetGroup.getChildren().addAll(hStreet, vStreet);
 
         Line hLine = new Line(0, height / 2, width, height / 2);
-        hLine.setStroke(Color.YELLOW);
-        hLine.getStrokeDashArray().addAll(25d, 20d);
+        hLine.setStroke(LANE_DIVIDER_COLOR);
+        hLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
 
         Line vLine = new Line(width / 2, 0, width / 2, height);
-        vLine.setStroke(Color.YELLOW);
-        vLine.getStrokeDashArray().addAll(25d, 20d);
+        vLine.setStroke(LANE_DIVIDER_COLOR);
+        vLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
         streetGroup.getChildren().addAll(hLine, vLine);
 
         streetGroup.getChildren()
-                .add(createStopSign(width / 2 + streetWidth / 2 + 45, height / 2 - streetWidth / 2 - 45, -90)); // East
+                .add(createStopSign(width / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, height / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_EAST)); // East
         streetGroup.getChildren()
-                .add(createStopSign(width / 2 - streetWidth / 2 - 45, height / 2 + streetWidth / 2 + 45, 90)); // West
+                .add(createStopSign(width / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, height / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_WEST)); // West
         streetGroup.getChildren()
-                .add(createStopSign(width / 2 - streetWidth / 2 - 45, height / 2 - streetWidth / 2 - 45, 180)); // North
+                .add(createStopSign(width / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, height / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_NORTH)); // North
         streetGroup.getChildren()
-                .add(createStopSign(width / 2 + streetWidth / 2 + 45, height / 2 + streetWidth / 2 + 45, 0)); // South
+                .add(createStopSign(width / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, height / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_SOUTH)); // South
     }
 
     private Group createStopSign(double x, double y, double angle) {
-        double scale = 0.5;
+        double scale = STOP_SIGN_SCALE;
         Polygon octagon = new Polygon(
-                20 * scale, 0, 40 * scale, 0, 60 * scale, 20 * scale, 60 * scale, 40 * scale,
-                40 * scale, 60 * scale, 20 * scale, 60 * scale, 0, 40 * scale, 0, 20 * scale);
-        octagon.setFill(Color.RED);
-        octagon.setStroke(Color.WHITE);
-        octagon.setStrokeWidth(2);
+                STOP_SIGN_OCTAGON_SIZE * scale, 0, STOP_SIGN_OCTAGON_OFFSET * scale, 0, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_SIZE * scale, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_OFFSET * scale,
+                STOP_SIGN_OCTAGON_OFFSET * scale, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_SIZE * scale, STOP_SIGN_OCTAGON_CORNER * scale, 0, STOP_SIGN_OCTAGON_OFFSET * scale, 0, STOP_SIGN_OCTAGON_SIZE * scale);
+        octagon.setFill(STOP_SIGN_COLOR);
+        octagon.setStroke(STOP_SIGN_STROKE_COLOR);
+        octagon.setStrokeWidth(STOP_SIGN_STROKE_WIDTH);
 
-        Text text = new Text("STOP");
-        text.setFont(Font.font("Arial BOLD", 16 * scale));
-        text.setFill(Color.WHITE);
-        text.setX(10 * scale);
-        text.setY(37 * scale);
+        Text text = new Text(STOP_SIGN_TEXT);
+        text.setFont(Font.font(STOP_SIGN_FONT_FAMILY, STOP_SIGN_TEXT_SIZE * scale));
+        text.setFill(STOP_SIGN_TEXT_COLOR);
+        text.setX(STOP_SIGN_TEXT_X_OFFSET * scale);
+        text.setY(STOP_SIGN_TEXT_Y_OFFSET * scale);
 
         Rectangle pole = new Rectangle();
-        pole.setX(28 * scale);
-        pole.setY(60 * scale);
-        pole.setWidth(4 * scale);
-        pole.setHeight(40 * scale);
-        pole.setFill(Color.LIGHTGRAY);
+        pole.setX(STOP_SIGN_POLE_X_OFFSET * scale);
+        pole.setY(STOP_SIGN_POLE_Y_OFFSET * scale);
+        pole.setWidth(STOP_SIGN_POLE_WIDTH * scale);
+        pole.setHeight(STOP_SIGN_POLE_HEIGHT * scale);
+        pole.setFill(STOP_SIGN_POLE_COLOR);
 
         Group sign = new Group(octagon, text, pole);
-        sign.relocate(x - 30 * scale, y - 30 * scale);
-        sign.getTransforms().add(new Rotate(angle, 30 * scale, 30 * scale));
+        sign.relocate(x - STOP_SIGN_CENTER_OFFSET * scale, y - STOP_SIGN_CENTER_OFFSET * scale);
+        sign.getTransforms().add(new Rotate(angle, STOP_SIGN_CENTER_OFFSET * scale, STOP_SIGN_CENTER_OFFSET * scale));
         return sign;
     }
 
@@ -174,9 +176,9 @@ public class IntersectionViewController {
         vehicle.setController(this);
 
         // 2. Crea su representación visual
-        Circle vehicleCircle = new Circle(8,
-                type == VehicleType.EMERGENCY ? Color.web("#e74c3c") : Color.web("#3498db"));
-        vehicleCircle.setStroke(Color.BLACK);
+        Circle vehicleCircle = new Circle(VEHICLE_RADIUS,
+                type == VehicleType.EMERGENCY ? Color.web(MotorwayConstants.EMERGENCY_VEHICLE_COLOR) : Color.web(MotorwayConstants.NORMAL_VEHICLE_COLOR));
+        vehicleCircle.setStroke(MotorwayConstants.VEHICLE_STROKE_COLOR);
 
         // 3. Obtiene su ruta y posición inicial
         List<Point2D> path = getPath(origin, movement);
@@ -198,7 +200,7 @@ public class IntersectionViewController {
     @FXML
     private void addMultipleVehicles() {
         disableButtonsTemporarily();
-        final int numberOfVehiclesToAdd = 15;
+        final int numberOfVehiclesToAdd = MULTIPLE_VEHICLES_COUNT;
         log.info("batch_vehicle_creation_started count={} simulationType=intersection", numberOfVehiclesToAdd);
         final Random random = new Random();
 
@@ -212,11 +214,11 @@ public class IntersectionViewController {
                     Direction randomOrigin = origins[random.nextInt(origins.length)];
                     VehicleMovement randomDestination = movements[random.nextInt(movements.length)];
 
-                    VehicleType randomType = (random.nextInt(200) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
+                    VehicleType randomType = (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
 
                     Platform.runLater(() -> createAndStartVehicle(randomType, randomOrigin, randomDestination));
 
-                    Thread.sleep(1000);
+                    Thread.sleep(VEHICLE_SPAWN_DELAY_MS);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -236,7 +238,7 @@ public class IntersectionViewController {
                         simulationPane.getChildren().remove(entry.getValue());
                         iterator.remove();
                     } else {
-                        entry.getValue().relocate(entry.getKey().getX() - 8, entry.getKey().getY() - 8);
+                        entry.getValue().relocate(entry.getKey().getX() - VEHICLE_VISUAL_OFFSET, entry.getKey().getY() - VEHICLE_VISUAL_OFFSET);
                     }
                 }
             }
@@ -248,7 +250,7 @@ public class IntersectionViewController {
         addVehicleButton.setDisable(true);
         addMultipleButton.setDisable(true);
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        PauseTransition pause = new PauseTransition(Duration.seconds(BUTTON_DISABLE_DURATION_SECONDS));
 
         pause.setOnFinished(event -> {
             addVehicleButton.setDisable(false);
@@ -264,8 +266,8 @@ public class IntersectionViewController {
         if (width == 0 || height == 0)
             return List.of();
 
-        double streetW = Math.min(width, height) / 4.0;
-        final double STOP_GAP = 20.0;
+        double streetW = Math.min(width, height) / STREET_WIDTH_DIVISOR;
+        final double STOP_GAP = STOP_LINE_GAP;
         // Viniendo del NORTE: carril izquierdo de la pantalla (su derecha)
         double N_IN_X = width / 2 - streetW / 4;
         double N_OUT_X = width / 2 + streetW / 4;
@@ -284,23 +286,23 @@ public class IntersectionViewController {
         Point2D stopE = new Point2D(width / 2 + streetW / 2 + STOP_GAP, E_IN_Y);
         Point2D stopW = new Point2D(width / 2 - streetW / 2 - STOP_GAP, W_IN_Y);
 
-        Point2D exitN = new Point2D(N_OUT_X, -50);
-        Point2D exitS = new Point2D(S_OUT_X, height + 50);
-        Point2D exitE = new Point2D(width + 50, E_OUT_Y);
-        Point2D exitW = new Point2D(-50, W_OUT_Y);
+        Point2D exitN = new Point2D(N_OUT_X, -ENTRY_EXIT_OFFSET);
+        Point2D exitS = new Point2D(S_OUT_X, height + ENTRY_EXIT_OFFSET);
+        Point2D exitE = new Point2D(width + ENTRY_EXIT_OFFSET, E_OUT_Y);
+        Point2D exitW = new Point2D(-ENTRY_EXIT_OFFSET, W_OUT_Y);
         if (movement.equals(VehicleMovement.U_TURN)) {
             switch (origin) {
                 case NORTH:
-                    return List.of(new Point2D(N_IN_X, -50), stopN, new Point2D(N_OUT_X, stopN.getY() + STOP_GAP),
+                    return List.of(new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET), stopN, new Point2D(N_OUT_X, stopN.getY() + STOP_GAP),
                             exitN);
                 case SOUTH:
-                    return List.of(new Point2D(S_IN_X, height + 50), stopS,
+                    return List.of(new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET), stopS,
                             new Point2D(S_OUT_X, stopS.getY() - STOP_GAP), exitS);
                 case EAST:
-                    return List.of(new Point2D(width + 50, E_IN_Y), stopE,
+                    return List.of(new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y), stopE,
                             new Point2D(stopE.getX() - STOP_GAP, E_OUT_Y), exitE);
                 case WEST:
-                    return List.of(new Point2D(-50, W_IN_Y), stopW, new Point2D(stopW.getX() + STOP_GAP, W_OUT_Y),
+                    return List.of(new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y), stopW, new Point2D(stopW.getX() + STOP_GAP, W_OUT_Y),
                             exitW);
                 default:
                     break;
@@ -309,7 +311,7 @@ public class IntersectionViewController {
 
         switch (origin) {
             case NORTH:
-                Point2D startN = new Point2D(N_IN_X, -50);
+                Point2D startN = new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET);
                 Point2D enterN = new Point2D(N_IN_X, stopN.getY() + STOP_GAP);
                 switch (movement) {
                     case STRAIGHT:
@@ -324,7 +326,7 @@ public class IntersectionViewController {
                 }
                 break;
             case SOUTH:
-                Point2D startS = new Point2D(S_IN_X, height + 50);
+                Point2D startS = new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET);
                 Point2D enterS = new Point2D(S_IN_X, stopS.getY() - STOP_GAP);
                 switch (movement) {
                     case STRAIGHT:
@@ -339,7 +341,7 @@ public class IntersectionViewController {
                 }
                 break;
             case EAST:
-                Point2D startE = new Point2D(width + 50, E_IN_Y);
+                Point2D startE = new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y);
                 Point2D enterE = new Point2D(stopE.getX() - STOP_GAP, E_IN_Y);
                 switch (movement) {
                     case STRAIGHT:
@@ -355,7 +357,7 @@ public class IntersectionViewController {
                 }
                 break;
             case WEST:
-                Point2D startW = new Point2D(-50, W_IN_Y);
+                Point2D startW = new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y);
                 Point2D enterW = new Point2D(stopW.getX() + STOP_GAP, W_IN_Y);
                 switch (movement) {
                     case STRAIGHT:

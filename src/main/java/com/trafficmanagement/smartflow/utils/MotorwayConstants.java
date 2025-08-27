@@ -72,6 +72,26 @@ public class MotorwayConstants {
   public static final double DEFAULT_MOTORWAY_WIDTH = 800.0;
   public static final double DEFAULT_MOTORWAY_HEIGHT = 600.0;
 
+  public static final int TOTAL_INTERSECTIONS = 4;
+  public static final int FIRST_INTERSECTION = 1;
+  public static final int LAST_INTERSECTION = 4;
+  
+  public static final double TRAFFIC_LIGHT_Y_OFFSET = 20.0;
+  public static final double TRAFFIC_LIGHT_X_CENTER_OFFSET = 7.0;
+  public static final double TRAFFIC_LIGHT_Y_UPPER_OFFSET = -10.0;
+  public static final double TRAFFIC_LIGHT_Y_LOWER_OFFSET = 10.0;
+  
+  public static final double VEHICLE_START_OFFSET = 50.0;
+  public static final double VEHICLE_RELOCATE_OFFSET = 10.0;
+  public static final double VEHICLE_PATH_OFFSET = -50.0;
+  
+  public static final double LANE_Y_MULTIPLIER_UPPER = 1.5;
+  public static final double LANE_Y_MULTIPLIER_LOWER = 4.5;
+  
+  public static final int BUTTON_DISABLE_DURATION_SECONDS = 1;
+  
+  public static final double INTERSECTION_WIDTH_DIVISOR = 2.0;
+
   private MotorwayConstants() {
     // it's not required
   }

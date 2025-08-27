@@ -7,6 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
+import static com.trafficmanagement.smartflow.utils.TrafficLightConstants.*;
 
 @Slf4j
 public class TrafficLightController {
@@ -15,10 +16,10 @@ public class TrafficLightController {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public TrafficLightController() {
-        for (int ind = 1; ind <= 6; ind++) {
-            lightStates.put(ind, new AtomicBoolean(false));
+        for (int ind = MIN_LIGHT_ID; ind <= TOTAL_TRAFFIC_LIGHTS; ind++) {
+            lightStates.put(ind, new AtomicBoolean(INITIAL_LIGHT_STATE));
         }
-        log.info("traffic_light_controller_initialized lightCount=6 initialState=red");
+        log.info("traffic_light_controller_initialized lightCount={} initialState=red", TOTAL_TRAFFIC_LIGHTS);
         startCycle();
     }
 
@@ -39,7 +40,7 @@ public class TrafficLightController {
             lightStates.get(4).set(!is4Green);
             lightStates.get(5).set(is4Green);
 
-        }, 0, 10, TimeUnit.SECONDS);
+        }, INITIAL_DELAY_SECONDS, CYCLE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
     private void toggleLight(int lightId) {
@@ -49,12 +50,12 @@ public class TrafficLightController {
     }
 
     public boolean isGreen(int lightId) {
-        if (lightId < 1 || lightId > 6) return false;
+        if (lightId < MIN_LIGHT_ID || lightId > MAX_LIGHT_ID) return false;
         return lightStates.get(lightId).get();
     }
     
     public void setEmergencyGreen(int lightId, boolean green) {
-        if (lightId >= 1 && lightId <= 6) {
+        if (lightId >= MIN_LIGHT_ID && lightId <= MAX_LIGHT_ID) {
              lightStates.get(lightId).set(green);
              log.warn("emergency_override_activated lightId={} forcedState={}", lightId, green ? "green" : "red");
         }

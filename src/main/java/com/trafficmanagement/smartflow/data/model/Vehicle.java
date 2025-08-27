@@ -1,16 +1,17 @@
 package com.trafficmanagement.smartflow.data.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import static com.trafficmanagement.smartflow.utils.VehicleConstants.*;
 
-import com.trafficmanagement.smartflow.controller.MotorwayViewController;
 import com.trafficmanagement.smartflow.controller.IntersectionViewController;
+import com.trafficmanagement.smartflow.controller.MotorwayViewController;
 import com.trafficmanagement.smartflow.controller.TrafficLightController;
 import com.trafficmanagement.smartflow.data.enums.Direction;
 import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.utils.MotorwayConstants;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import lombok.Getter;
@@ -21,15 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class Vehicle implements Runnable {
-  private static final AtomicInteger idCounter = new AtomicInteger(0);
+  private static final AtomicInteger idCounter = new AtomicInteger(COUNTER_START);
   private static final double SAFE_DISTANCE = 50.0;
   private final int id;
   private final VehicleType type;
   private final Direction origin;
   private final VehicleMovement movement;
   private final TrafficManager trafficManager;
-  private final double normalSpeed = 2;
-  private final double emergencyClearSpeed = 7.4;
+  private final double normalSpeed = NORMAL_SPEED;
+  private final double emergencyClearSpeed = EMERGENCY_SPEED;
   private volatile boolean running = true;
   private Direction lane;
   private MotorwayViewController motorwayViewController;
@@ -39,8 +40,8 @@ public class Vehicle implements Runnable {
   private double y;
   private volatile boolean finished = false;
   private List<Integer> trafficLightPath;
-  private int nextTrafficLightIndex = 0;
-  private int lastKnownIntersectionId = -1;
+  private int nextTrafficLightIndex = INITIAL_TRAFFIC_LIGHT_INDEX;
+  private int lastKnownIntersectionId = NO_INTERSECTION;
 
   private TrafficLightController trafficLightController;
   private IntersectionStateManager intersectionStateManager;
@@ -52,8 +53,13 @@ public class Vehicle implements Runnable {
     this.origin = origin;
     this.movement = movement;
     this.trafficManager = intersection;
-    log.info("vehicle_created vehicleId={} type={} origin={} movement={} intersectionId={}",
-        id, type, origin, movement, intersection.getId());
+    log.info(
+        "vehicle_created vehicleId={} type={} origin={} movement={} intersectionId={}",
+        id,
+        type,
+        origin,
+        movement,
+        intersection.getId());
   }
 
   public Vehicle(
@@ -66,16 +72,25 @@ public class Vehicle implements Runnable {
     this.origin = origin;
     this.movement = movement;
     this.trafficManager = targetIntersection;
-    log.info("vehicle_created vehicleId={} type={} origin={} movement={} targetIntersectionId={}",
-        id, type, origin, movement, targetIntersection != null ? targetIntersection.getId(): -1);
+    log.info(
+        "vehicle_created vehicleId={} type={} origin={} movement={} targetIntersectionId={}",
+        id,
+        type,
+        origin,
+        movement,
+        targetIntersection != null ? targetIntersection.getId() : -1);
   }
 
   @Override
   public void run() {
     if (isFinished()) return;
-    
-    log.info("vehicle_thread_started vehicleId={} type={} origin={} movement={}",
-        id, type, origin, movement);
+
+    log.info(
+        "vehicle_thread_started vehicleId={} type={} origin={} movement={}",
+        id,
+        type,
+        origin,
+        movement);
 
     try {
       if (intersectionViewController != null) {
@@ -100,7 +115,7 @@ public class Vehicle implements Runnable {
       }
 
       trafficManager.addToQueue(this);
-      int currentPathSegment = 1;
+      int currentPathSegment = INITIAL_PATH_SEGMENT;
       boolean crossingStarted = false;
       boolean hasLeftIntersection = false;
 
@@ -112,16 +127,19 @@ public class Vehicle implements Runnable {
             crossingStarted = true;
             trafficManager.startCrossing(this);
             target = path.get(currentPathSegment);
-            log.info("vehicle_crossing_started vehicleId={} type={} intersectionId={}", 
-                id, type, trafficManager.getId());
+            log.info(
+                "vehicle_crossing_started vehicleId={} type={} intersectionId={}",
+                id,
+                type,
+                trafficManager.getId());
           } else {
-            target = getDynamicStopPoint(path.get(1));
+            target = getDynamicStopPoint(path.get(INITIAL_PATH_SEGMENT));
           }
         }
 
         moveTo(target, this.type == VehicleType.EMERGENCY || trafficManager.isEmergencyActive());
 
-        if (distanceTo(target) < 1.5) {
+        if (distanceTo(target) < TARGET_REACHED_THRESHOLD) {
           if (crossingStarted) {
             currentPathSegment++;
           }
@@ -130,11 +148,14 @@ public class Vehicle implements Runnable {
         if (crossingStarted && !hasLeftIntersection && currentPathSegment == path.size() - 1) {
           trafficManager.leaveIntersection(this);
           hasLeftIntersection = true;
-          log.info("vehicle_crossing_completed vehicleId={} type={} intersectionId={}", 
-              id, type, trafficManager.getId());
+          log.info(
+              "vehicle_crossing_completed vehicleId={} type={} intersectionId={}",
+              id,
+              type,
+              trafficManager.getId());
         }
 
-        Thread.sleep(16);
+        Thread.sleep(MOVEMENT_SLEEP_DURATION_MS);
       }
     } catch (InterruptedException e) {
       log.info("vehicle_thread_interrupted vehicleId={} type={}", id, type);
@@ -154,7 +175,7 @@ public class Vehicle implements Runnable {
       }
 
       calculateTrafficLightPath();
-      int currentPathSegment = 1;
+      int currentPathSegment = INITIAL_PATH_SEGMENT;
 
       while (running && currentPathSegment < path.size()) {
 
@@ -162,7 +183,7 @@ public class Vehicle implements Runnable {
         if (leader != null
             && distanceTo(new Point2D(leader.getX(), leader.getY())) < SAFE_DISTANCE) {
           updateIntersectionState();
-          Thread.sleep(16);
+          Thread.sleep(MOVEMENT_SLEEP_DURATION_MS);
           continue;
         }
 
@@ -179,10 +200,10 @@ public class Vehicle implements Runnable {
               (origin == Direction.WEST && getX() < stopLine.getX())
                   || (origin == Direction.EAST && getX() > stopLine.getX());
 
-          if (stopLineIsInFront && distanceTo(stopLine) > 2.0) {
+          if (stopLineIsInFront && distanceTo(stopLine) > STOP_LINE_PROXIMITY) {
             moveTo(stopLine, this.type == VehicleType.EMERGENCY);
             updateIntersectionState();
-            Thread.sleep(16);
+            Thread.sleep(MOVEMENT_SLEEP_DURATION_MS);
             continue;
           }
 
@@ -190,14 +211,18 @@ public class Vehicle implements Runnable {
             boolean canGo = false;
             if (this.type == VehicleType.EMERGENCY) {
               canGo = true;
-              log.debug("emergency_vehicle_override vehicleId={} lightId={} canGo=true", id, lightId);
+              log.debug(
+                  "emergency_vehicle_override vehicleId={} lightId={} canGo=true", id, lightId);
               if ((movement == VehicleMovement.TURN_LEFT || movement == VehicleMovement.U_TURN)
                   && isAtFinalTurn(lightId)) {
                 if (intersectionStateManager.isOpposingTrafficCrossing(
                     getTargetIntersection().getId(), this)) {
                   canGo = false;
-                  log.warn("emergency_blocked_by_opposing_traffic vehicleId={} lightId={} intersectionId={}", 
-                      id, lightId, getTargetIntersection().getId());
+                  log.warn(
+                      "emergency_blocked_by_opposing_traffic vehicleId={} lightId={} intersectionId={}",
+                      id,
+                      lightId,
+                      getTargetIntersection().getId());
                 }
               }
             } else {
@@ -220,7 +245,7 @@ public class Vehicle implements Runnable {
 
             if (!canGo) {
               updateIntersectionState();
-              Thread.sleep(16);
+              Thread.sleep(MOVEMENT_SLEEP_DURATION_MS);
               continue;
             }
           }
@@ -230,12 +255,12 @@ public class Vehicle implements Runnable {
         Point2D currentTarget = path.get(currentPathSegment);
         moveTo(currentTarget, this.type == VehicleType.EMERGENCY);
 
-        if (distanceTo(currentTarget) < 2.0) {
+        if (distanceTo(currentTarget) < STOP_LINE_PROXIMITY) {
           currentPathSegment++;
         }
 
         updateIntersectionState();
-        Thread.sleep(16);
+        Thread.sleep(MOVEMENT_SLEEP_DURATION_MS);
       }
 
       if (running && this.movement == VehicleMovement.U_TURN) {
@@ -248,7 +273,7 @@ public class Vehicle implements Runnable {
       Thread.currentThread().interrupt();
     } finally {
       if (intersectionStateManager != null) {
-        if (lastKnownIntersectionId != -1) {
+        if (lastKnownIntersectionId != NO_INTERSECTION) {
           intersectionStateManager.vehicleExitsStraightZone(lastKnownIntersectionId, this);
         }
       }
@@ -262,10 +287,16 @@ public class Vehicle implements Runnable {
     if (getTargetIntersection() == null) return false;
     int targetIntersectionId = getTargetIntersection().getId();
 
-    if ((lightId == 1 && targetIntersectionId == 1)
-        || ((lightId == 2 || lightId == 3) && targetIntersectionId == 2)
-        || ((lightId == 4 || lightId == 5) && targetIntersectionId == 3)
-        || (lightId == 6 && targetIntersectionId == 4)) {
+    if ((lightId == MotorwayConstants.TRAFFIC_LIGHT_1
+            && targetIntersectionId == MotorwayConstants.INTERSECTION_1)
+        || ((lightId == MotorwayConstants.TRAFFIC_LIGHT_2
+                || lightId == MotorwayConstants.TRAFFIC_LIGHT_3)
+            && targetIntersectionId == MotorwayConstants.INTERSECTION_2)
+        || ((lightId == MotorwayConstants.TRAFFIC_LIGHT_4
+                || lightId == MotorwayConstants.TRAFFIC_LIGHT_5)
+            && targetIntersectionId == MotorwayConstants.INTERSECTION_3)
+        || (lightId == MotorwayConstants.TRAFFIC_LIGHT_6
+            && targetIntersectionId == MotorwayConstants.INTERSECTION_4)) {
       return true;
     }
     return false;
@@ -274,11 +305,12 @@ public class Vehicle implements Runnable {
   private void updateIntersectionState() {
     int currentIntersectionId = getMyCurrentIntersectionId();
 
-    if (lastKnownIntersectionId != -1 && lastKnownIntersectionId != currentIntersectionId) {
+    if (lastKnownIntersectionId != NO_INTERSECTION
+        && lastKnownIntersectionId != currentIntersectionId) {
       intersectionStateManager.vehicleExitsStraightZone(lastKnownIntersectionId, this);
     }
 
-    if (currentIntersectionId != -1) {
+    if (currentIntersectionId != NO_INTERSECTION) {
       intersectionStateManager.vehicleEntersStraightZone(currentIntersectionId, this);
     }
 
@@ -286,15 +318,19 @@ public class Vehicle implements Runnable {
   }
 
   private int getMyCurrentIntersectionId() {
-    for (int ind = 1; ind <= 4; ind++) {
+    for (int ind = MotorwayConstants.FIRST_INTERSECTION;
+        ind <= MotorwayConstants.TOTAL_INTERSECTIONS;
+        ind++) {
       double centerX =
-          motorwayViewController.getIntersectionCenterX(ind, motorwayViewController.getSimulationPaneWidth());
+          motorwayViewController.getIntersectionCenterX(
+              ind, motorwayViewController.getSimulationPaneWidth());
       double width = MotorwayConstants.INTERSECTION_WIDTH;
-      if (this.x > centerX - width / 2 && this.x < centerX + width / 2) {
+      if (this.x > centerX - width / MotorwayConstants.INTERSECTION_WIDTH_DIVISOR
+          && this.x < centerX + width / MotorwayConstants.INTERSECTION_WIDTH_DIVISOR) {
         return ind;
       }
     }
-    return -1;
+    return NO_INTERSECTION;
   }
 
   private boolean isApproachingTrafficLight() {
@@ -304,39 +340,53 @@ public class Vehicle implements Runnable {
   private void calculateTrafficLightPath() {
     trafficLightPath = new ArrayList<>();
     int finalIntersectionId =
-        (getTargetIntersection() != null) ? getTargetIntersection().getId() : 0;
+        (getTargetIntersection() != null) ? getTargetIntersection().getId() : COUNTER_START;
 
     if (origin == Direction.WEST) {
-      if (movement == VehicleMovement.STRAIGHT || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
+      if (movement == VehicleMovement.STRAIGHT
+          || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
         if (getX()
             < motorwayViewController.getIntersectionCenterX(
-                2, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(3);
+                MotorwayConstants.INTERSECTION_2, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_3);
         if (getX()
             < motorwayViewController.getIntersectionCenterX(
-                3, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(5);
+                MotorwayConstants.INTERSECTION_3, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_5);
         if (getX()
             < motorwayViewController.getIntersectionCenterX(
-                4, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(6);
+                MotorwayConstants.INTERSECTION_4, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_6);
       } else {
-        if (finalIntersectionId >= 2) trafficLightPath.add(3);
-        if (finalIntersectionId >= 3) trafficLightPath.add(5);
-        if (finalIntersectionId >= 4) trafficLightPath.add(6);
+        if (finalIntersectionId >= MotorwayConstants.INTERSECTION_2)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_3);
+        if (finalIntersectionId >= MotorwayConstants.INTERSECTION_3)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_5);
+        if (finalIntersectionId >= MotorwayConstants.INTERSECTION_4)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_6);
       }
     } else {
-      if (movement == VehicleMovement.STRAIGHT  || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
+      if (movement == VehicleMovement.STRAIGHT
+          || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
         if (getX()
             > motorwayViewController.getIntersectionCenterX(
-                3, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(4);
+                MotorwayConstants.INTERSECTION_3, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_4);
         if (getX()
             > motorwayViewController.getIntersectionCenterX(
-                2, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(2);
+                MotorwayConstants.INTERSECTION_2, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_2);
         if (getX()
             > motorwayViewController.getIntersectionCenterX(
-                1, motorwayViewController.getSimulationPaneWidth())) trafficLightPath.add(1);
+                MotorwayConstants.INTERSECTION_1, motorwayViewController.getSimulationPaneWidth()))
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_1);
       } else {
-        if (finalIntersectionId <= 3) trafficLightPath.add(4);
-        if (finalIntersectionId <= 2) trafficLightPath.add(2);
-        if (finalIntersectionId <= 1) trafficLightPath.add(1);
+        if (finalIntersectionId <= MotorwayConstants.INTERSECTION_3)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_4);
+        if (finalIntersectionId <= MotorwayConstants.INTERSECTION_2)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_2);
+        if (finalIntersectionId <= MotorwayConstants.INTERSECTION_1)
+          trafficLightPath.add(MotorwayConstants.TRAFFIC_LIGHT_1);
       }
     }
   }
@@ -366,8 +416,7 @@ public class Vehicle implements Runnable {
   private Point2D getDynamicStopPoint(Point2D baseStopLine) {
     if (trafficManager == null) return baseStopLine;
     int positionInQueue = trafficManager.getPositionInQueue(this);
-    double vehicleSpacing = 30.0;
-    double offset = positionInQueue * vehicleSpacing;
+    double offset = positionInQueue * VEHICLE_SPACING;
 
     return switch (origin) {
       case NORTH -> new Point2D(baseStopLine.getX(), baseStopLine.getY() - offset);
