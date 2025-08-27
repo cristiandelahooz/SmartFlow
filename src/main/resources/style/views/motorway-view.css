@@ -1,0 +1,164 @@
+@import "../base/common.css";
+@import "../base/components.css";
+@import "../base/layouts.css";
+
+.motorway-view {
+    -fx-background-color: #F9FAFB;
+}
+
+.motorway-view .control-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 2 0 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 24;
+    -fx-spacing: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0.2, 2, 0);
+}
+
+.motorway-view .title-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #DC2626;
+    -fx-padding: 0 0 16 0;
+}
+
+.motorway-view .header-section {
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 20 0;
+    -fx-border-color: #F3F4F6;
+    -fx-border-width: 0 0 1 0;
+}
+
+.motorway-view .form-section {
+    -fx-spacing: 16;
+    -fx-padding: 20 0 20 0;
+}
+
+.motorway-view .form-section .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+    -fx-padding: 0 0 6 0;
+}
+
+.motorway-view .combo-box {
+    -fx-min-width: 200;
+    -fx-pref-width: 200;
+    -fx-max-width: 1.7976931348623157E308;
+}
+
+.motorway-view .button-section {
+    -fx-spacing: 12;
+    -fx-padding: 20 0 0 0;
+}
+
+.motorway-view .button-primary {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 20 14 20;
+    -fx-min-width: 200;
+    -fx-pref-width: 200;
+    -fx-max-width: 1.7976931348623157E308;
+}
+
+.motorway-view .simulation-pane {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 2 0 0 0;
+}
+
+.motorway-view .back-button {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+}
+
+.motorway-view .back-button:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.05);
+    -fx-border-color: #EF4444;
+}
+
+.motorway-view .spacer {
+    -fx-min-height: 1;
+    -fx-pref-height: 1;
+    -fx-max-height: 1.7976931348623157E308;
+}
+
+.motorway-view .lane-marker {
+    -fx-background-color: #9CA3AF;
+    -fx-background-radius: 1;
+}
+
+.motorway-view .road-surface {
+    -fx-background-color: #374151;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 2;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.motorway-view .intersection-marker {
+    -fx-background-color: #4B5563;
+    -fx-border-color: #DC2626;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, #DC2626, 4, 0.5, 0, 0);
+}
+
+.motorway-view .vehicle-regular {
+    -fx-background-color: #3B82F6;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.motorway-view .vehicle-emergency {
+    -fx-background-color: #DC2626;
+    -fx-border-color: #B91C1C;
+    -fx-border-width: 2;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-effect: dropshadow(gaussian, #DC2626, 4, 0.6, 0, 0);
+}
+
+.motorway-view .vehicle-commercial {
+    -fx-background-color: #F59E0B;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.motorway-view .vehicle-public {
+    -fx-background-color: #10B981;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.motorway-view .speed-indicator {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #DC2626;
+    -fx-border-width: 2;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-text-fill: #DC2626;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+    -fx-pref-width: 24;
+    -fx-pref-height: 24;
+}
