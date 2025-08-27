@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="480.0" prefWidth="720.0" spacing="24.0" styleClass="control-panel" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficmanagement.smartflow.controller.MainLayoutController">
+
+    <stylesheets>
+        <URL value="@../style/styles.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label prefHeight="51.0" prefWidth="75.0" styleClass="title-label" text="Smart Flow">
+        <font>
+            <Font name="Al Bayan Plain" size="13.0" />
+        </font>
+    </Label>
+    <Button minWidth="300.0" onAction="#startIntersectionView" styleClass="button-primary" text="Simular Intersección" />
+    <Button minWidth="300.0" onAction="#startMotorwayView" styleClass="button-primary" text="Simular autopista" />
+</VBox>
