@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2d475821-1df0-4419-a44c-fbede1a88083" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/Intersection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/Street.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/TestTrafficSystem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/TrafficController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/TrafficLight.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/TrafficLightController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/TrafficManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/org/example/Vehicle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/control/SimulationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/control/TrafficController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/model/Intersection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/model/TrafficLight.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/model/Vehicle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/trafficmanagement/smartflow/model/VehicleType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/trafficmanagement/smartflow/simulation-view.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/MainView.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="31qG8EKiNSbTiOVQizs8y0aELnl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="openDirectoriesWithSingleClick" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+    <option name="sortByType" value="true" />
+    <option name="sortKey" value="BY_TYPE" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Home-Lab.executor&quot;: &quot;Vaadin.HotswapAgentExecutor&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Vaadin.HotswapAgentExecutor&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Develop&quot;,
+    &quot;ignore.preview.features.used&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/cristiandelahoz/ghq/github.com/cristiandelahooz/SmartFlow/src/main/resources/fxml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.JavaFX&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/fxml" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/style" />
+      <recent name="$PROJECT_DIR$/src/main/resources/fxml" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Home-Lab" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.trafficmanagement.smartflow.Main" />
+      <module name="SmartFlow" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2d475821-1df0-4419-a44c-fbede1a88083" name="Changes" comment="" />
+      <created>1756244027776</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1756244027776</updated>
+      <workItem from="1756244028788" duration="9168000" />
+      <workItem from="1756276350843" duration="3014000" />
+      <workItem from="1756279594756" duration="200000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
