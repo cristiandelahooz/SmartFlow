@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="motorway-view" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficmanagement.smartflow.controller.MotorwayViewController">
+
+    <stylesheets>
+        <URL value="@../style/views/motorway-view.css" />
+    </stylesheets>
+
+    <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-section">
+            <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button" />
+            <Label styleClass="title-label" text="Control de Autopista" wrapText="true" />
+        </HBox>
+
+        <VBox prefHeight="100" prefWidth="258.0" styleClass="form-section">
+            <Label text="Tipo de Vehículo" />
+            <ComboBox fx:id="vehicleTypeComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label text="Posición de salida" />
+            <ComboBox fx:id="startPosition" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label text="Acción en Intersección" />
+            <ComboBox fx:id="movementComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
+
+            <Label fx:id="intersectionLabel" text="Número de Intersección (1-4)" />
+            <ComboBox fx:id="intersectionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" prefWidth="218.0" />
+        </VBox>
+
+
+        <HBox styleClass="button-section">
+            <Button fx:id="addVehicleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addVehicle" prefHeight="46.0" prefWidth="165.0" styleClass="button-primary" text="Lanzar Vehículo" />
+            <Button fx:id="addMultipleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addMultipleVehicles" prefHeight="46.0" prefWidth="217.0" styleClass="button-primary" text="Lanzar Lote Aleatorio" />
+        </HBox>
+        <Pane VBox.vgrow="ALWAYS" />
+    </VBox>
+</AnchorPane>

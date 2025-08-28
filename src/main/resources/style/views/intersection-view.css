@@ -1,0 +1,138 @@
+@import "../base/common.css";
+@import "../base/components.css";
+@import "../base/layouts.css";
+
+.intersection-view {
+    -fx-background-color: #F9FAFB;
+}
+
+.intersection-view .control-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 2 0 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 24;
+    -fx-spacing: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0.2, 2, 0);
+}
+
+.intersection-view .title-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #DC2626;
+    -fx-padding: 0 0 16 0;
+}
+
+.intersection-view .header-section {
+    -fx-spacing: 16;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 20 0;
+    -fx-border-color: #F3F4F6;
+    -fx-border-width: 0 0 1 0;
+}
+
+.intersection-view .form-section {
+    -fx-spacing: 16;
+    -fx-padding: 20 0 20 0;
+}
+
+.intersection-view .form-section .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+    -fx-padding: 0 0 6 0;
+}
+
+.intersection-view .combo-box {
+    -fx-min-width: 200;
+    -fx-pref-width: 200;
+}
+
+.intersection-view .button-section {
+    -fx-spacing: 12;
+    -fx-padding: 20 0 0 0;
+}
+
+.intersection-view .button-primary {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 20 14 20;
+    -fx-min-width: 200;
+    -fx-pref-width: 200;
+}
+
+.intersection-view .simulation-pane {
+    -fx-background-color: #4a9a96214;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 2 0 0 0;
+}
+
+.intersection-view .back-button {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+}
+
+.intersection-view .back-button:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.05);
+    -fx-border-color: #EF4444;
+}
+
+.intersection-view .spacer {
+    -fx-min-height: 1;
+    -fx-pref-height: 1;
+}
+
+.intersection-view .traffic-light-indicator {
+    -fx-background-radius: 50%;
+    -fx-min-width: 12;
+    -fx-min-height: 12;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-max-width: 12;
+    -fx-max-height: 12;
+}
+
+.intersection-view .traffic-light-red {
+    -fx-background-color: #DC2626;
+    -fx-effect: dropshadow(gaussian, #DC2626, 3, 0.8, 0, 0);
+}
+
+.intersection-view .traffic-light-yellow {
+    -fx-background-color: #F59E0B;
+    -fx-effect: dropshadow(gaussian, #F59E0B, 3, 0.8, 0, 0);
+}
+
+.intersection-view .traffic-light-green {
+    -fx-background-color: #10B981;
+    -fx-effect: dropshadow(gaussian, #10B981, 3, 0.8, 0, 0);
+}
+
+.intersection-view .traffic-light-off {
+    -fx-background-color: #4B5563;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+}
+
+.intersection-view .vehicle-regular {
+    -fx-background-color: #3B82F6;
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.intersection-view .vehicle-emergency {
+    -fx-background-color: #DC2626;
+    -fx-border-color: #B91C1C;
+    -fx-border-width: 2;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-effect: dropshadow(gaussian, #DC2626, 4, 0.6, 0, 0);
+}

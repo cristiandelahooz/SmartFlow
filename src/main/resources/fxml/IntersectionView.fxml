@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" styleClass="intersection-view" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.trafficmanagement.smartflow.controller.IntersectionViewController">
+
+    <stylesheets>
+        <URL value="@../style/views/intersection-view.css"/>
+    </stylesheets>
+
+    <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+
+    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-section">
+            <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button"/>
+            <Label styleClass="title-label" text="Control de Intersección"/>
+        </HBox>
+
+        <VBox styleClass="form-section">
+            <Label text="Tipo de Vehículo"/>
+            <ComboBox fx:id="typeComboBox" maxWidth="1.7976931348623157E308"/>
+
+            <Label text="Origen"/>
+            <ComboBox fx:id="originComboBox" maxWidth="1.7976931348623157E308"/>
+
+            <Label text="Destino"/>
+            <ComboBox fx:id="vehicleMovementComboBox" maxWidth="1.7976931348623157E308"/>
+        </VBox>
+
+        <Pane styleClass="spacer" VBox.vgrow="ALWAYS"/>
+
+        <VBox styleClass="button-section">
+            <Button fx:id="addVehicleButton" onAction="#addVehicle" styleClass="button-primary" text="AÑADIR"
+                    HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+            <Button fx:id="addMultipleButton" onAction="#addMultipleVehicles" styleClass="button-primary"
+                    text="AÑADIR LOTE" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+        </VBox>
+    </VBox>
+</AnchorPane>

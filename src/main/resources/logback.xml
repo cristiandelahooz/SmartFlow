@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    
+    <!-- Suppress internal logback startup messages -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!-- Development Console Appender with colors and readable format -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Readable format: Time Level ClassName - Message -->
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%-25logger{0}) - %highlight(%msg)%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender for persistent logging -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/smartflow.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/smartflow.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>300MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Enhanced console pattern - clean and reliable -->
+    <appender name="ENHANCED_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Clean pattern with good readability -->
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%-25logger{0}) %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Alternative clean console pattern for canonical logs -->
+    <appender name="CLEAN_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Ultra clean format for canonical logging -->
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%-25logger{0}) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Ultra minimal console for production-like output -->
+    <appender name="MINIMAL_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Minimal format: just time, level, class and message -->
+            <pattern>%d{HH:mm:ss} %-5level %logger{0} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger configurations for SmartFlow components -->
+    
+    <!-- Vehicle lifecycle events -->
+    <logger name="com.trafficmanagement.smartflow.data.model.Vehicle" level="INFO"/>
+    
+    <!-- Traffic management core events -->
+    <logger name="com.trafficmanagement.smartflow.data.model.MotorwayIntersection" level="INFO"/>
+    <logger name="com.trafficmanagement.smartflow.data.model.Intersection" level="INFO"/>
+    
+    <!-- Controller events -->
+    <logger name="com.trafficmanagement.smartflow.controller.MotorwayViewController" level="INFO"/>
+    <logger name="com.trafficmanagement.smartflow.controller.IntersectionViewController" level="INFO"/>
+    <logger name="com.trafficmanagement.smartflow.controller.TrafficLightController" level="INFO"/>
+    
+    <!-- State management - reduce to WARN to eliminate noise -->
+    <logger name="com.trafficmanagement.smartflow.data.model.IntersectionStateManager" level="WARN"/>
+    
+    <!-- Utils and other components -->
+    <logger name="com.trafficmanagement.smartflow.utils" level="WARN"/>
+    
+    <!-- Framework and libraries - keep quiet -->
+    <logger name="javafx" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="sun" level="WARN"/>
+    <logger name="javax" level="WARN"/>
+    
+    <!-- Root logger - uses ENHANCED_CONSOLE for colored key=value pairs -->
+    <root level="INFO">
+        <appender-ref ref="ENHANCED_CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

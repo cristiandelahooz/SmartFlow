@@ -1,0 +1,161 @@
+@import "common.css";
+
+.control-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 24;
+    -fx-spacing: 16;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 1 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.2, 2, 0);
+}
+
+.main-container {
+    -fx-background-color: #FFFFFF;
+    -fx-spacing: 24;
+    -fx-alignment: center;
+    -fx-padding: 40 24 40 24;
+}
+
+.simulation-container {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.header-section {
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 16 0;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 1 0;
+}
+
+.form-section {
+    -fx-spacing: 12;
+    -fx-padding: 16 0 16 0;
+}
+
+.button-section {
+    -fx-spacing: 12;
+    -fx-padding: 16 0 0 0;
+}
+
+.card {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0.2, 0, 2);
+}
+
+.card-elevated {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.3, 0, 4);
+}
+
+.toolbar {
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 1 0;
+}
+
+.status-bar {
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 8 16 8 16;
+    -fx-spacing: 16;
+    -fx-alignment: center-left;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1 0 0 0;
+}
+
+.sidebar {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 24;
+    -fx-spacing: 16;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 1 0 0;
+    -fx-min-width: 280;
+    -fx-max-width: 280;
+}
+
+.content-area {
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 0;
+}
+
+.spacer {
+    -fx-min-height: 16;
+    -fx-pref-height: 16;
+}
+
+.spacer-large {
+    -fx-min-height: 32;
+    -fx-pref-height: 32;
+}
+
+.divider {
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0.5 0 0 0;
+    -fx-padding: 8 0 8 0;
+}
+
+.panel {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 16;
+}
+
+.panel-header {
+    -fx-padding: 0 0 12 0;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 1 0;
+}
+
+.panel-content {
+    -fx-padding: 12 0 0 0;
+    -fx-spacing: 12;
+}
+
+.grid-container {
+    -fx-hgap: 16;
+    -fx-vgap: 16;
+    -fx-padding: 16;
+}
+
+.flex-container {
+    -fx-spacing: 16;
+    -fx-alignment: center;
+}
+
+.flex-container.start {
+    -fx-alignment: center-left;
+}
+
+.flex-container.end {
+    -fx-alignment: center-right;
+}
+
+.flex-container.between {
+    -fx-alignment: center;
+    -fx-fill-width: true;
+}
+
+.flex-container.around {
+    -fx-alignment: center;
+    -fx-fill-width: true;
+}

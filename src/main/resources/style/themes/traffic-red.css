@@ -1,0 +1,50 @@
+/*
+ * JavaFX CSS Color Reference for SmartFlow Traffic Management System
+ * 
+ * Since JavaFX doesn't support CSS Custom Properties, this file serves as
+ * a reference for the red/white color scheme used throughout the application.
+ * 
+ * Primary Color Palette - Red Theme:
+ * - Main Red: #DC2626
+ * - Light Red (hover): #EF4444
+ * - Dark Red (pressed): #B91C1C
+ * - Transparent Red: rgba(220, 38, 38, 0.1)
+ * 
+ * Background Colors - White/Light Theme:
+ * - White: #FFFFFF
+ * - Light Gray: #F9FAFB
+ * - Medium Gray: #F3F4F6
+ * 
+ * Simulation Colors:
+ * - Simulation Background: #1F2937
+ * - Road Color: #374151
+ * - Intersection Color: #4B5563
+ * 
+ * Text Colors:
+ * - Primary Text: #111827
+ * - Secondary Text: #6B7280
+ * - Tertiary Text: #9CA3AF
+ * - Text on Red: #FFFFFF
+ * 
+ * Border Colors:
+ * - Light Border: #E5E7EB
+ * - Very Light Border: #F3F4F6
+ * - Dark Border: #D1D5DB
+ * 
+ * Interactive States:
+ * - Hover Background: rgba(220, 38, 38, 0.05)
+ * - Pressed Background: rgba(220, 38, 38, 0.1)
+ * - Focus Outline: rgba(220, 38, 38, 0.3)
+ * 
+ * Traffic Light Colors:
+ * - Red Light: #DC2626
+ * - Yellow Light: #F59E0B
+ * - Green Light: #10B981
+ * - Inactive Light: #4B5563
+ * 
+ * Vehicle Colors:
+ * - Regular Vehicle: #3B82F6 (blue)
+ * - Emergency Vehicle: #DC2626 (red)
+ * - Public Transport: #10B981 (green)
+ * - Commercial Vehicle: #F59E0B (orange)
+ */
