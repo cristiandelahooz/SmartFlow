@@ -12,7 +12,7 @@ public class MotorwayConstants {
   public static final double SAFE_DISTANCE = 50.0;
   public static final double SAFE_DISTANCE_MULTIPLIER = 1.5;
 
-  public static final int EMERGENCY_VEHICLE_PROBABILITY = 1000;
+  public static final int EMERGENCY_VEHICLE_PROBABILITY = 5;
   public static final int MULTIPLE_VEHICLES_COUNT = 15;
   public static final int VEHICLE_SPAWN_DELAY_MS = 1000;
 
