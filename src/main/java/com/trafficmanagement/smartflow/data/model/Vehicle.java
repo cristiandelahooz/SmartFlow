@@ -94,9 +94,9 @@ public class Vehicle implements Runnable {
 
     try {
       if (intersectionViewController != null) {
-        runSimpleIntersectionLogic();
+        runIntersection();
       } else if (motorwayViewController != null) {
-        runMotorwayLogic();
+        runMotorway();
       } else {
         this.finished = true;
         log.warn("vehicle_no_controller vehicleId={} finished=true", id);
@@ -106,7 +106,7 @@ public class Vehicle implements Runnable {
     }
   }
 
-  private void runSimpleIntersectionLogic() {
+  private void runIntersection() {
     try {
       List<Point2D> path = getPathFromController();
       if (path.isEmpty()) {
@@ -166,7 +166,7 @@ public class Vehicle implements Runnable {
     }
   }
 
-  private void runMotorwayLogic() {
+  private void runMotorway() {
     try {
       List<Point2D> path = getPathFromController();
       if (path.isEmpty()) {
