@@ -7,6 +7,7 @@ import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.Intersection;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
+import com.trafficmanagement.smartflow.ui.ComboBoxWrapper;
 import com.trafficmanagement.smartflow.utils.CompassUtils;
 import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 import com.trafficmanagement.smartflow.utils.ViewsHandler;
@@ -46,6 +47,9 @@ public class IntersectionViewController {
   @FXML private Button addVehicleButton;
   @FXML private Button addMultipleButton;
   @FXML private Button backButton;
+  private ComboBoxWrapper<VehicleType> typeWrapper;
+  private ComboBoxWrapper<Locations> originWrapper;
+  private ComboBoxWrapper<VehicleMovement> vehicleMovementWrapper;
   private AnimationTimer animationTimer;
 
   @FXML
@@ -69,28 +73,39 @@ public class IntersectionViewController {
   public void initialize() {
     simulationPane.getChildren().add(streetGroup);
 
-    typeComboBox.getItems().setAll(VehicleType.values());
-    originComboBox
+    typeWrapper = new ComboBoxWrapper<>(typeComboBox);
+    originWrapper = new ComboBoxWrapper<>(originComboBox);
+    vehicleMovementWrapper = new ComboBoxWrapper<>(vehicleMovementComboBox);
+
+    typeWrapper.getItems().setAll(VehicleType.values());
+    originWrapper
         .getItems()
         .setAll(Locations.NORTH, Locations.SOUTH, Locations.EAST, Locations.WEST);
-    vehicleMovementComboBox.getItems().setAll(VehicleMovement.values());
+    vehicleMovementWrapper.getItems().setAll(VehicleMovement.getAllMovements());
     typeComboBox.getSelectionModel().selectFirst();
     originComboBox.getSelectionModel().selectFirst();
     vehicleMovementComboBox.getSelectionModel().selectFirst();
-    FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_LEFT);
+
+    FontIcon backIcon = new FontIcon(FontAwesomeSolid.LONG_ARROW_ALT_LEFT);
     backButton.setGraphic(backIcon);
 
     compass = CompassUtils.createCompass();
     simulationPane.getChildren().add(compass);
 
-    simulationPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-      redrawStreet();
-      repositionCompass();
-    });
-    simulationPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-      redrawStreet();
-      repositionCompass();
-    });
+    simulationPane
+        .widthProperty()
+        .addListener(
+            (obs, oldVal, newVal) -> {
+              redrawStreet();
+              repositionCompass();
+            });
+    simulationPane
+        .heightProperty()
+        .addListener(
+            (obs, oldVal, newVal) -> {
+              redrawStreet();
+              repositionCompass();
+            });
 
     startAnimationLoop();
   }
@@ -132,7 +147,7 @@ public class IntersectionViewController {
   private void addVehicle() {
     disableButtonsTemporarily();
     createAndStartVehicle(
-        typeComboBox.getValue(), originComboBox.getValue(), vehicleMovementComboBox.getValue());
+        typeWrapper.getValue(), originWrapper.getValue(), vehicleMovementWrapper.getValue());
   }
 
   private void createAndStartVehicle(VehicleType type, Locations origin, VehicleMovement movement) {
