@@ -33,14 +33,10 @@ The system implements thread-safe traffic simulation using:
 ## Menu
 <img width="1538" height="962" alt="image" src="https://github.com/user-attachments/assets/a11cde08-2c71-4e55-a0c2-1c0bd02307b0" />
 
-## Intersection
-<img width="1540" height="999" alt="image" src="https://github.com/user-attachments/assets/90e39a21-b804-4843-8800-ec76d21c638f" />
-
-## Motorway
-<img width="1540" height="961" alt="image" src="https://github.com/user-attachments/assets/ad9c76a3-75ad-4beb-9971-26ff9f7eb7c6" />
-
 ## Example
-https://github.com/user-attachments/assets/1fe59e19-6764-4d30-9fd2-46b7fccbbd40
+https://github.com/user-attachments/assets/7a3ff15c-6dfb-4e86-989b-ad3d8afecfbc
+
+
 
 
 
