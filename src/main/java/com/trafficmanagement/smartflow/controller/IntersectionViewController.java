@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.Intersection;
@@ -43,7 +43,7 @@ public class IntersectionViewController {
   private final Group streetGroup = new Group();
   @FXML private Pane simulationPane;
   @FXML private ComboBox<VehicleType> typeComboBox;
-  @FXML private ComboBox<Direction> originComboBox;
+  @FXML private ComboBox<Locations> originComboBox;
   @FXML private ComboBox<VehicleMovement> vehicleMovementComboBox;
   @FXML private Button addVehicleButton;
   @FXML private Button addMultipleButton;
@@ -74,7 +74,7 @@ public class IntersectionViewController {
     typeComboBox.getItems().setAll(VehicleType.values());
     originComboBox
         .getItems()
-        .setAll(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+        .setAll(Locations.NORTH, Locations.SOUTH, Locations.EAST, Locations.WEST);
     vehicleMovementComboBox.getItems().setAll(VehicleMovement.values());
     typeComboBox.getSelectionModel().selectFirst();
     originComboBox.getSelectionModel().selectFirst();
@@ -166,7 +166,7 @@ public class IntersectionViewController {
         typeComboBox.getValue(), originComboBox.getValue(), vehicleMovementComboBox.getValue());
   }
 
-  private void createAndStartVehicle(VehicleType type, Direction origin, VehicleMovement movement) {
+  private void createAndStartVehicle(VehicleType type, Locations origin, VehicleMovement movement) {
     Vehicle vehicle = new Vehicle(type, origin, movement, intersection);
     vehicle.setController(this);
 
@@ -203,13 +203,13 @@ public class IntersectionViewController {
     new Thread(
             () -> {
               try {
-                Direction[] origins = {
-                  Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
+                Locations[] origins = {
+                  Locations.NORTH, Locations.SOUTH, Locations.EAST, Locations.WEST
                 };
                 VehicleMovement[] movements = VehicleMovement.values();
 
                 for (int ind = 0; ind < numberOfVehiclesToAdd; ind++) {
-                  Direction randomOrigin = origins[random.nextInt(origins.length)];
+                  Locations randomOrigin = origins[random.nextInt(origins.length)];
                   VehicleMovement randomDestination = movements[random.nextInt(movements.length)];
 
                   VehicleType randomType =
@@ -271,7 +271,7 @@ public class IntersectionViewController {
     pause.play();
   }
 
-  public List<Point2D> getPath(Direction origin, VehicleMovement movement) {
+  public List<Point2D> getPath(Locations origin, VehicleMovement movement) {
     double width = simulationPane.getWidth();
     double height = simulationPane.getHeight();
     if (width == 0 || height == 0) return List.of();

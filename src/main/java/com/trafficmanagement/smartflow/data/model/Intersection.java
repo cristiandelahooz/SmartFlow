@@ -1,6 +1,6 @@
 package com.trafficmanagement.smartflow.data.model;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -12,14 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Intersection implements TrafficManager {
-  private final Map<Direction, ConcurrentLinkedQueue<Vehicle>> waitingQueues;
+  private final Map<Locations, ConcurrentLinkedQueue<Vehicle>> waitingQueues;
   private final ConcurrentLinkedQueue<Vehicle> globalArrivalQueue = new ConcurrentLinkedQueue<>();
   private final Set<Vehicle> crossingVehicles = ConcurrentHashMap.newKeySet();
 
   public Intersection() {
-    waitingQueues = new EnumMap<>(Direction.class);
-    for (Direction dir :
-        new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+    waitingQueues = new EnumMap<>(Locations.class);
+    for (Locations dir :
+        new Locations[] { Locations.NORTH, Locations.SOUTH, Locations.EAST, Locations.WEST}) {
       waitingQueues.put(dir, new ConcurrentLinkedQueue<>());
     }
   }
@@ -41,7 +41,7 @@ public class Intersection implements TrafficManager {
     Vehicle activeEmergency = findActiveEmergency();
 
     if (activeEmergency != null) {
-      Direction emergencyLane = activeEmergency.getOrigin();
+      Locations emergencyLane = activeEmergency.getOrigin();
 
       Vehicle headOfEmergencyLane = waitingQueues.get(emergencyLane).peek();
       if (crossingVehicles.isEmpty()) {

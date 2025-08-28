@@ -5,7 +5,7 @@ import static com.trafficmanagement.smartflow.utils.VehicleConstants.*;
 import com.trafficmanagement.smartflow.controller.IntersectionViewController;
 import com.trafficmanagement.smartflow.controller.MotorwayViewController;
 import com.trafficmanagement.smartflow.controller.TrafficLightController;
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.utils.MotorwayConstants;
@@ -26,13 +26,13 @@ public class Vehicle implements Runnable {
   private static final double SAFE_DISTANCE = 50.0;
   private final int id;
   private final VehicleType type;
-  private final Direction origin;
+  private final Locations origin;
   private final VehicleMovement movement;
   private final TrafficManager trafficManager;
   private final double normalSpeed = NORMAL_SPEED;
   private final double emergencyClearSpeed = EMERGENCY_SPEED;
   private volatile boolean running = true;
-  private Direction lane;
+  private Locations lane;
   private MotorwayViewController motorwayViewController;
   private IntersectionViewController intersectionViewController;
   private long arrivalTime;
@@ -47,7 +47,7 @@ public class Vehicle implements Runnable {
   private IntersectionStateManager intersectionStateManager;
 
   public Vehicle(
-      VehicleType type, Direction origin, VehicleMovement movement, Intersection intersection) {
+      VehicleType type, Locations origin, VehicleMovement movement, Intersection intersection) {
     this.id = idCounter.incrementAndGet();
     this.type = type;
     this.origin = origin;
@@ -64,7 +64,7 @@ public class Vehicle implements Runnable {
 
   public Vehicle(
       VehicleType type,
-      Direction origin,
+      Locations origin,
       VehicleMovement movement,
       MotorwayIntersection targetIntersection) {
     this.id = idCounter.incrementAndGet();
@@ -197,8 +197,8 @@ public class Vehicle implements Runnable {
                   motorwayViewController.getSimulationPaneWidth(),
                   motorwayViewController.getSimulationPane().getHeight());
           boolean stopLineIsInFront =
-              (origin == Direction.WEST && getX() < stopLine.getX())
-                  || (origin == Direction.EAST && getX() > stopLine.getX());
+              (origin == Locations.WEST && getX() < stopLine.getX())
+                  || (origin == Locations.EAST && getX() > stopLine.getX());
 
           if (stopLineIsInFront && distanceTo(stopLine) > STOP_LINE_PROXIMITY) {
             moveTo(stopLine, this.type == VehicleType.EMERGENCY);
@@ -342,7 +342,7 @@ public class Vehicle implements Runnable {
     int finalIntersectionId =
         (getTargetIntersection() != null) ? getTargetIntersection().getId() : COUNTER_START;
 
-    if (origin == Direction.WEST) {
+    if (origin == Locations.WEST) {
       if (movement == VehicleMovement.STRAIGHT
           || movement == VehicleMovement.STRAIGH_AFTER_U_TURN) {
         if (getX()

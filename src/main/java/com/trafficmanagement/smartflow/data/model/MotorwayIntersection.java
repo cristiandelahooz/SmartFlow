@@ -1,6 +1,6 @@
 package com.trafficmanagement.smartflow.data.model;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,19 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 public class MotorwayIntersection implements TrafficManager {
   private final int id;
   private final ReentrantLock lock = new ReentrantLock(true);
-  private final Map<Direction, Map<Direction, ConcurrentLinkedQueue<Vehicle>>> waitingLanes;
-  private final LinkedList<Direction> laneQueue = new LinkedList<>();
+  private final Map<Locations, Map<Locations, ConcurrentLinkedQueue<Vehicle>>> waitingLanes;
+  private final LinkedList<Locations> laneQueue = new LinkedList<>();
   private final Set<Vehicle> crossingVehicles = ConcurrentHashMap.newKeySet();
   private volatile boolean emergencyActive = false;
 
   public MotorwayIntersection(int id) {
     this.id = id;
-    this.waitingLanes = new EnumMap<>(Direction.class);
-    for (Direction dir : Direction.getMotorwayDirections()) {
-      Map<Direction, ConcurrentLinkedQueue<Vehicle>> lanes = new EnumMap<>(Direction.class);
-      lanes.put(Direction.FIRST_RAIL, new ConcurrentLinkedQueue<>());
-      lanes.put(Direction.SECOND_RAIL, new ConcurrentLinkedQueue<>());
-      lanes.put(Direction.THIRD_RAIL, new ConcurrentLinkedQueue<>());
+    this.waitingLanes = new EnumMap<>(Locations.class);
+    for (Locations dir : Locations.getMotorwayDirections()) {
+      Map<Locations, ConcurrentLinkedQueue<Vehicle>> lanes = new EnumMap<>(Locations.class);
+      lanes.put(Locations.FIRST_RAIL, new ConcurrentLinkedQueue<>());
+      lanes.put(Locations.SECOND_RAIL, new ConcurrentLinkedQueue<>());
+      lanes.put(Locations.THIRD_RAIL, new ConcurrentLinkedQueue<>());
       waitingLanes.put(dir, lanes);
     }
   }
@@ -45,7 +45,7 @@ public class MotorwayIntersection implements TrafficManager {
 
     lock.lock();
     try {
-      Direction originLane = vehicle.getOrigin();
+      Locations originLane = vehicle.getOrigin();
       if (vehicle.getType() == VehicleType.EMERGENCY) {
         if (!this.emergencyActive) {
           this.emergencyActive = true;
@@ -78,8 +78,8 @@ public class MotorwayIntersection implements TrafficManager {
         return false;
       }
 
-      Direction activeDirection = laneQueue.peek();
-      if (!vehicle.getOrigin().equals(activeDirection)) {
+      Locations activeLocations = laneQueue.peek();
+      if (!vehicle.getOrigin().equals(activeLocations)) {
         return false;
       }
 
@@ -164,15 +164,15 @@ public class MotorwayIntersection implements TrafficManager {
 
   public boolean hasEmergencyVehicleWaiting() {
     boolean westQueueHasEmergency =
-        waitingLanes.get(Direction.WEST).get(Direction.FIRST_RAIL).stream()
+        waitingLanes.get(Locations.WEST).get(Locations.FIRST_RAIL).stream()
             .anyMatch(v -> v.getType() == VehicleType.EMERGENCY);
     boolean eastQueueHasEmergency =
-        waitingLanes.get(Direction.EAST).get(Direction.FIRST_RAIL).stream()
+        waitingLanes.get(Locations.EAST).get(Locations.FIRST_RAIL).stream()
             .anyMatch(v -> v.getType() == VehicleType.EMERGENCY);
     return westQueueHasEmergency || eastQueueHasEmergency;
   }
 
-  private boolean isDirectionCompletelyClear(Direction origin) {
+  private boolean isDirectionCompletelyClear(Locations origin) {
     boolean crossingEmpty = crossingVehicles.stream().noneMatch(v -> v.getOrigin() == origin);
     boolean waitingEmpty = waitingLanes.get(origin).values().stream().allMatch(Queue::isEmpty);
     return crossingEmpty && waitingEmpty;

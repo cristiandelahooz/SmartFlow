@@ -1,9 +1,10 @@
 package com.trafficmanagement.smartflow.data.model;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,21 +39,20 @@ public class IntersectionStateManager {
   }
 
   public boolean isOpposingTrafficCrossing(int intersectionId, Vehicle turningVehicle) {
-    Direction opposingDirection =
-        turningVehicle.getOrigin() == Direction.WEST ? Direction.EAST : Direction.WEST;
+    Locations opposingLocations =
+            turningVehicle.getOrigin() == Locations.WEST ? Locations.EAST : Locations.WEST;
 
     boolean hasOpposingTraffic =
         crossingStraightVehicles.get(intersectionId).stream()
-            .anyMatch(v -> v.getOrigin() == opposingDirection);
+            .anyMatch(v -> v.getOrigin() == opposingLocations);
 
     if (hasOpposingTraffic)
       log.info(
-          "opposing_traffic_detected vehicleId={} type={} origin={} intersectionId={} opposingDirection={}",
+          "opposing_traffic_detected vehicleId={} type={} origin={} intersectionId={} opposingLocations={}",
           turningVehicle.getId(),
           turningVehicle.getType(),
           turningVehicle.getOrigin(),
-          intersectionId,
-          opposingDirection);
+          intersectionId, opposingLocations);
 
     return hasOpposingTraffic;
   }

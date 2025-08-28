@@ -1,7 +1,6 @@
 package com.trafficmanagement.smartflow.service;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
-import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
 import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 import javafx.geometry.Point2D;
@@ -22,7 +21,7 @@ public class VehiclePathCalculatorService {
 
         List<Integer> trafficLightPath = new ArrayList<>();
         
-        if (vehicle.getOrigin() == Direction.WEST) {
+        if (vehicle.getOrigin() == Locations.WEST) {
             addWestboundTrafficLights(trafficLightPath, finalIntersectionId, width);
         } else {
             addEastboundTrafficLights(trafficLightPath, finalIntersectionId, width);
@@ -97,7 +96,7 @@ public class VehiclePathCalculatorService {
         };
     }
 
-    public Point2D getDynamicStopPoint(Point2D baseStopLine, Direction origin, int queuePosition) {
+    public Point2D getDynamicStopPoint(Point2D baseStopLine, Locations origin, int queuePosition) {
         double offset = queuePosition * VEHICLE_SPACING;
         
         return switch (origin) {

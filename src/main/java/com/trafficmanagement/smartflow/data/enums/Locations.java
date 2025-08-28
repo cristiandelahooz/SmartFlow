@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public enum Direction {
+public enum Locations {
   NORTH("Norte"),
   SOUTH("Sur"),
   EAST("Este"),
@@ -19,7 +19,7 @@ public enum Direction {
 
   private final String displayName;
 
-  public static List<Direction> getMotorwayDirections() {
+  public static List<Locations> getMotorwayDirections() {
     return List.of(WEST, EAST);
   }
 }

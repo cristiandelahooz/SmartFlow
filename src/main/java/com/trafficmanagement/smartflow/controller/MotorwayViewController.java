@@ -2,7 +2,7 @@ package com.trafficmanagement.smartflow.controller;
 
 import static com.trafficmanagement.smartflow.utils.MotorwayConstants.*;
 
-import com.trafficmanagement.smartflow.data.enums.Direction;
+import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.IntersectionStateManager;
@@ -42,11 +42,11 @@ public class MotorwayViewController {
   private final TrafficLightController trafficLightController = new TrafficLightController();
   private final IntersectionStateManager intersectionStateManager = new IntersectionStateManager();
   @FXML private ComboBox<VehicleType> vehicleTypeComboBox;
-  @FXML private ComboBox<Direction> startPosition;
+  @FXML private ComboBox<Locations> startPosition;
   @FXML private ComboBox<VehicleMovement> movementComboBox;
   @FXML private ComboBox<Integer> intersectionComboBox;
   private ComboBoxWrapper<VehicleType> vehicleTypeWrapper;
-  private ComboBoxWrapper<Direction> startPositionWrapper;
+  private ComboBoxWrapper<Locations> startPositionWrapper;
   private ComboBoxWrapper<VehicleMovement> movementWrapper;
   @FXML private Button addVehicleButton;
   @FXML private Button addMultipleButton;
@@ -67,7 +67,7 @@ public class MotorwayViewController {
     movementWrapper = new ComboBoxWrapper<>(movementComboBox);
 
     vehicleTypeWrapper.getItems().setAll(VehicleType.values());
-    startPositionWrapper.getItems().setAll(Direction.getMotorwayDirections());
+    startPositionWrapper.getItems().setAll(Locations.getMotorwayDirections());
     movementWrapper.getItems().setAll(VehicleMovement.values());
 
     vehicleTypeComboBox.getSelectionModel().selectFirst();
@@ -97,10 +97,10 @@ public class MotorwayViewController {
     intersectionComboBox.setManaged(isTurn);
   }
 
-  private void updateAvailableIntersections(Direction origin) {
+  private void updateAvailableIntersections(Locations origin) {
     Integer previouslySelected = intersectionComboBox.getValue();
     intersectionComboBox.getItems().clear();
-    if (origin == Direction.WEST) {
+    if (origin == Locations.WEST) {
       intersectionComboBox.getItems().setAll(INTERSECTION_2, INTERSECTION_3, INTERSECTION_4);
     } else {
       intersectionComboBox.getItems().setAll(INTERSECTION_1, INTERSECTION_2, INTERSECTION_3);
@@ -273,13 +273,13 @@ public class MotorwayViewController {
   private void addVehicle() {
     disableVehicleCreationButtonsTemporarily();
     VehicleType type = vehicleTypeWrapper.getValue();
-    Direction origin = startPositionWrapper.getValue();
+    Locations origin = startPositionWrapper.getValue();
     VehicleMovement movement = movementWrapper.getValue();
-    Direction lane;
+    Locations lane;
     if (movement.equals(VehicleMovement.TURN_LEFT) || movement.equals(VehicleMovement.U_TURN))
-      lane = Direction.FIRST_RAIL;
-    else if (movement.equals(VehicleMovement.TURN_RIGHT)) lane = Direction.THIRD_RAIL;
-    else lane = Direction.SECOND_RAIL;
+      lane = Locations.FIRST_RAIL;
+    else if (movement.equals(VehicleMovement.TURN_RIGHT)) lane = Locations.THIRD_RAIL;
+    else lane = Locations.SECOND_RAIL;
     Integer intersectionId =
         intersectionComboBox.isVisible() ? intersectionComboBox.getValue() : null;
     createAndStartVehicle(type, origin, lane, movement, intersectionId);
@@ -296,21 +296,21 @@ public class MotorwayViewController {
             () -> {
               try {
                 for (int ind = 0; ind < numVehicles; ind++) {
-                  Direction origin = random.nextBoolean() ? Direction.WEST : Direction.EAST;
+                  Locations origin = random.nextBoolean() ? Locations.WEST : Locations.EAST;
                   VehicleMovement movement = movements[random.nextInt(movements.length)];
                   VehicleType type =
                       (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
 
-                  Direction lane;
+                  Locations lane;
                   if (movement.equals(VehicleMovement.U_TURN)
-                      || movement.equals(VehicleMovement.TURN_LEFT)) lane = Direction.FIRST_RAIL;
-                  else if (movement.equals(VehicleMovement.TURN_RIGHT)) lane = Direction.THIRD_RAIL;
-                  else lane = Direction.SECOND_RAIL;
+                      || movement.equals(VehicleMovement.TURN_LEFT)) lane = Locations.FIRST_RAIL;
+                  else if (movement.equals(VehicleMovement.TURN_RIGHT)) lane = Locations.THIRD_RAIL;
+                  else lane = Locations.SECOND_RAIL;
 
                   Integer intersectionId = null;
                   if (movement != VehicleMovement.STRAIGHT) {
                     List<Integer> possibleIntersections = new ArrayList<>();
-                    if (origin == Direction.WEST)
+                    if (origin == Locations.WEST)
                       possibleIntersections.addAll(Arrays.asList(INTERSECTION_2, INTERSECTION_3, INTERSECTION_4));
                     else possibleIntersections.addAll(Arrays.asList(INTERSECTION_1, INTERSECTION_2, INTERSECTION_3));
                     intersectionId =
@@ -318,7 +318,7 @@ public class MotorwayViewController {
                   }
 
                   final Integer finalIntersectionId = intersectionId;
-                  final Direction finalLane = lane;
+                  final Locations finalLane = lane;
                   Platform.runLater(
                       () ->
                           createAndStartVehicle(
@@ -336,8 +336,8 @@ public class MotorwayViewController {
 
   private void createAndStartVehicle(
       VehicleType type,
-      Direction origin,
-      Direction lane,
+      Locations origin,
+      Locations lane,
       VehicleMovement movement,
       Integer intersectionId) {
     MotorwayIntersection targetIntersection =
@@ -381,22 +381,22 @@ public class MotorwayViewController {
     if (width == 0 || height == 0) return List.of();
 
     double motorwayY = (height - (LANE_HEIGHT * TOTAL_LANES)) / 2;
-    Direction origin = vehicle.getOrigin();
+    Locations origin = vehicle.getOrigin();
     VehicleMovement movement = vehicle.getMovement();
-    Direction lane = vehicle.getLane();
+    Locations lane = vehicle.getLane();
     double startY = getLaneY(origin, lane, motorwayY);
 
     if (movement.equals(VehicleMovement.STRAIGH_AFTER_U_TURN)) {
       Point2D start = new Point2D(vehicle.getX(), vehicle.getY());
       Point2D end =
-          new Point2D(origin == Direction.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
+          new Point2D(origin == Locations.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
       return List.of(start, end);
     }
 
     if (movement.equals(VehicleMovement.STRAIGHT)) {
-      Point2D start = new Point2D(origin == Direction.WEST ? VEHICLE_PATH_OFFSET : width + VEHICLE_START_OFFSET, startY);
+      Point2D start = new Point2D(origin == Locations.WEST ? VEHICLE_PATH_OFFSET : width + VEHICLE_START_OFFSET, startY);
       Point2D end =
-          new Point2D(origin == Direction.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
+          new Point2D(origin == Locations.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
       return List.of(start, end);
     }
 
@@ -407,7 +407,7 @@ public class MotorwayViewController {
     List<Point2D> path = new ArrayList<>();
     Point2D startPoint, stopPoint, turnPoint;
 
-    if (origin == Direction.WEST) {
+    if (origin == Locations.WEST) {
       startPoint = new Point2D(VEHICLE_PATH_OFFSET, startY);
       stopPoint =
           new Point2D(
@@ -432,11 +432,11 @@ public class MotorwayViewController {
         case U_TURN:
           path.add(
               new Point2D(
-                  intersectionCenterX, getLaneY(Direction.EAST, Direction.SECOND_RAIL, motorwayY)));
+                  intersectionCenterX, getLaneY(Locations.EAST, Locations.SECOND_RAIL, motorwayY)));
           path.add(
               new Point2D(
                   intersectionCenterX - U_TURN_OFFSET,
-                  getLaneY(Direction.EAST, Direction.SECOND_RAIL, motorwayY)));
+                  getLaneY(Locations.EAST, Locations.SECOND_RAIL, motorwayY)));
           break;
         default:
           break;
@@ -462,11 +462,11 @@ public class MotorwayViewController {
         case U_TURN -> {
           path.add(
               new Point2D(
-                  intersectionCenterX, getLaneY(Direction.WEST, Direction.SECOND_RAIL, motorwayY)));
+                  intersectionCenterX, getLaneY(Locations.WEST, Locations.SECOND_RAIL, motorwayY)));
           path.add(
               new Point2D(
                   intersectionCenterX + U_TURN_OFFSET,
-                  getLaneY(Direction.WEST, Direction.SECOND_RAIL, motorwayY)));
+                  getLaneY(Locations.WEST, Locations.SECOND_RAIL, motorwayY)));
         }
         default -> {}
       }
@@ -474,8 +474,8 @@ public class MotorwayViewController {
     return path;
   }
 
-  private int getLightIdForIntersection(int intersectionId, Direction origin) {
-    if (origin == Direction.WEST) {
+  private int getLightIdForIntersection(int intersectionId, Locations origin) {
+    if (origin == Locations.WEST) {
       if (intersectionId == INTERSECTION_2) return TRAFFIC_LIGHT_3;
       if (intersectionId == INTERSECTION_3) return TRAFFIC_LIGHT_5;
       if (intersectionId == INTERSECTION_4) return TRAFFIC_LIGHT_6;
@@ -488,7 +488,7 @@ public class MotorwayViewController {
   }
 
   public Point2D getStopLineForLight(
-      int lightId, Direction origin, Direction lane, double width, double height) {
+      int lightId, Locations origin, Locations lane, double width, double height) {
     double motorwayY = (height - (LANE_HEIGHT * TOTAL_LANES)) / 2;
     double yPos = getLaneY(origin, lane, motorwayY);
     double xPos =
@@ -509,14 +509,14 @@ public class MotorwayViewController {
         };
 
     return new Point2D(
-        xPos - (origin == Direction.WEST ? STOP_LINE_OFFSET : -STOP_LINE_OFFSET), yPos);
+        xPos - (origin == Locations.WEST ? STOP_LINE_OFFSET : -STOP_LINE_OFFSET), yPos);
   }
 
-  private double getLaneY(Direction origin, Direction lane, double motorwayY) {
+  private double getLaneY(Locations origin, Locations lane, double motorwayY) {
     double laneOffset = LANE_1_OFFSET;
-    if (lane == Direction.SECOND_RAIL) laneOffset = LANE_2_OFFSET;
-    if (lane == Direction.THIRD_RAIL) laneOffset = LANE_3_OFFSET;
-    return origin == Direction.EAST
+    if (lane == Locations.SECOND_RAIL) laneOffset = LANE_2_OFFSET;
+    if (lane == Locations.THIRD_RAIL) laneOffset = LANE_3_OFFSET;
+    return origin == Locations.EAST
         ? motorwayY + (3 - laneOffset) * LANE_HEIGHT
         : motorwayY + (3 * LANE_HEIGHT) + (laneOffset * LANE_HEIGHT);
   }
@@ -532,7 +532,7 @@ public class MotorwayViewController {
           && followerVehicle.getLane() == potentialLeader.getLane()) {
         double distance;
         boolean isInFront;
-        if (followerVehicle.getOrigin() == Direction.WEST) {
+        if (followerVehicle.getOrigin() == Locations.WEST) {
           isInFront = potentialLeader.getX() > followerVehicle.getX();
           distance = potentialLeader.getX() - followerVehicle.getX();
         } else {
@@ -558,7 +558,7 @@ public class MotorwayViewController {
       if (leader.getOrigin() == potentialFollower.getOrigin()
           && leader.getLane() == potentialFollower.getLane()) {
         boolean isBehind;
-        if (leader.getOrigin() == Direction.WEST) {
+        if (leader.getOrigin() == Locations.WEST) {
           isBehind = potentialFollower.getX() < leader.getX();
         } else {
           isBehind = potentialFollower.getX() > leader.getX();
@@ -575,10 +575,10 @@ public class MotorwayViewController {
   }
 
   public void spawnStraightVehicleFromUTurn(Vehicle uTurnVehicle) {
-    Direction newOrigin =
-        (uTurnVehicle.getOrigin() == Direction.WEST) ? Direction.EAST : Direction.WEST;
+    Locations newOrigin =
+        (uTurnVehicle.getOrigin() == Locations.WEST) ? Locations.EAST : Locations.WEST;
     VehicleType type = uTurnVehicle.getType();
-    Direction lane = Direction.SECOND_RAIL;
+    Locations lane = Locations.SECOND_RAIL;
 
     Vehicle straightVehicle =
         new Vehicle(
