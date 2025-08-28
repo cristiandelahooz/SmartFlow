@@ -47,7 +47,6 @@
 .intersection-view .combo-box {
     -fx-min-width: 200;
     -fx-pref-width: 200;
-    -fx-max-width: 1.7976931348623157E308;
 }
 
 .intersection-view .button-section {
@@ -61,11 +60,10 @@
     -fx-padding: 14 20 14 20;
     -fx-min-width: 200;
     -fx-pref-width: 200;
-    -fx-max-width: 1.7976931348623157E308;
 }
 
 .intersection-view .simulation-pane {
-    -fx-background-color: #1F2937;
+    -fx-background-color: #4a9a96214;
     -fx-border-color: #D1D5DB;
     -fx-border-width: 2 0 0 0;
 }
@@ -89,7 +87,6 @@
 .intersection-view .spacer {
     -fx-min-height: 1;
     -fx-pref-height: 1;
-    -fx-max-height: 1.7976931348623157E308;
 }
 
 .intersection-view .traffic-light-indicator {

@@ -566,7 +566,7 @@ public class MotorwayViewController {
 
         if (isBehind
             && leader.distanceTo(new Point2D(potentialFollower.getX(), potentialFollower.getY()))
-                < SAFE_DISTANCE * 1.5) {
+                < SAFE_DISTANCE * SAFE_DISTANCE_MULTIPLIER) {
           return potentialFollower;
         }
       }

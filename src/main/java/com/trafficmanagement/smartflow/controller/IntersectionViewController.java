@@ -1,17 +1,19 @@
 package com.trafficmanagement.smartflow.controller;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import static com.trafficmanagement.smartflow.utils.IntersectionConstants.*;
 
 import com.trafficmanagement.smartflow.data.enums.Locations;
 import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.Intersection;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
+import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 import com.trafficmanagement.smartflow.utils.ViewsHandler;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -24,17 +26,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import lombok.extern.slf4j.Slf4j;
-import static com.trafficmanagement.smartflow.utils.IntersectionConstants.*;
-import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 
 @Slf4j
 public class IntersectionViewController {
@@ -113,50 +109,6 @@ public class IntersectionViewController {
     vLine.setStroke(LANE_DIVIDER_COLOR);
     vLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
     streetGroup.getChildren().addAll(hLine, vLine);
-  }
-
-  private Group createStopSign(double x, double y, double angle) {
-    double scale = STOP_SIGN_SCALE;
-    Polygon octagon =
-        new Polygon(
-            STOP_SIGN_OCTAGON_SIZE * scale,
-            0,
-            STOP_SIGN_OCTAGON_OFFSET * scale,
-            0,
-            STOP_SIGN_OCTAGON_CORNER * scale,
-            STOP_SIGN_OCTAGON_SIZE * scale,
-            STOP_SIGN_OCTAGON_CORNER * scale,
-            STOP_SIGN_OCTAGON_OFFSET * scale,
-            STOP_SIGN_OCTAGON_OFFSET * scale,
-            STOP_SIGN_OCTAGON_CORNER * scale,
-            STOP_SIGN_OCTAGON_SIZE * scale,
-            STOP_SIGN_OCTAGON_CORNER * scale,
-            0,
-            STOP_SIGN_OCTAGON_OFFSET * scale,
-            0,
-            STOP_SIGN_OCTAGON_SIZE * scale);
-    octagon.setFill(STOP_SIGN_COLOR);
-    octagon.setStroke(STOP_SIGN_STROKE_COLOR);
-    octagon.setStrokeWidth(STOP_SIGN_STROKE_WIDTH);
-
-    Text text = new Text(STOP_SIGN_TEXT);
-    text.setFont(Font.font(STOP_SIGN_FONT_FAMILY, STOP_SIGN_TEXT_SIZE * scale));
-    text.setFill(STOP_SIGN_TEXT_COLOR);
-    text.setX(STOP_SIGN_TEXT_X_OFFSET * scale);
-    text.setY(STOP_SIGN_TEXT_Y_OFFSET * scale);
-
-    Rectangle pole = new Rectangle();
-    pole.setX(STOP_SIGN_POLE_X_OFFSET * scale);
-    pole.setY(STOP_SIGN_POLE_Y_OFFSET * scale);
-    pole.setWidth(STOP_SIGN_POLE_WIDTH * scale);
-    pole.setHeight(STOP_SIGN_POLE_HEIGHT * scale);
-    pole.setFill(STOP_SIGN_POLE_COLOR);
-
-    Group sign = new Group(octagon, text, pole);
-    sign.relocate(x - STOP_SIGN_CENTER_OFFSET * scale, y - STOP_SIGN_CENTER_OFFSET * scale);
-    sign.getTransforms()
-        .add(new Rotate(angle, STOP_SIGN_CENTER_OFFSET * scale, STOP_SIGN_CENTER_OFFSET * scale));
-    return sign;
   }
 
   @FXML

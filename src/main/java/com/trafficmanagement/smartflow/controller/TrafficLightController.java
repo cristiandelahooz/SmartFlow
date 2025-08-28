@@ -32,11 +32,11 @@ public class TrafficLightController {
 
           boolean is2Green = lightStates.get(LIGHT_2).get();
           lightStates.get(LIGHT_2).set(!is2Green);
-          lightStates.get(LIGHT_2).set(is2Green);
+          lightStates.get(LIGHT_3).set(is2Green);
 
-          boolean is4Green = lightStates.get(LIGHT_4).get();
-          lightStates.get(LIGHT_4).set(!is4Green);
-          lightStates.get(LIGHT_5).set(is4Green);
+          boolean is4Green = lightStates.get(4).get();
+          lightStates.get(4).set(!is4Green);
+          lightStates.get(5).set(is4Green);
         },
         INITIAL_DELAY_SECONDS,
         CYCLE_INTERVAL_SECONDS,
