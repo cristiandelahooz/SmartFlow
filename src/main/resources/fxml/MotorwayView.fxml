@@ -10,12 +10,12 @@
         <URL value="@../style/views/motorway-view.css" />
     </stylesheets>
 
-    <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="0.0" />
 
-    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-section">
             <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button" />
-            <Label styleClass="title-label" text="Control de Autopista" wrapText="true" />
+            <Label styleClass="title-label" text="Autopista" wrapText="true" />
         </HBox>
 
         <VBox prefHeight="100" prefWidth="258.0" styleClass="form-section">
@@ -33,10 +33,10 @@
         </VBox>
 
 
-        <HBox styleClass="button-section">
+        <VBox styleClass="button-section">
             <Button fx:id="addVehicleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addVehicle" prefHeight="46.0" prefWidth="165.0" styleClass="button-primary" text="Lanzar Vehículo" />
             <Button fx:id="addMultipleButton" maxWidth="1.7976931348623157E308" minWidth="165.0" onAction="#addMultipleVehicles" prefHeight="46.0" prefWidth="217.0" styleClass="button-primary" text="Lanzar Lote Aleatorio" />
-        </HBox>
+        </VBox>
         <Pane VBox.vgrow="ALWAYS" />
     </VBox>
 </AnchorPane>

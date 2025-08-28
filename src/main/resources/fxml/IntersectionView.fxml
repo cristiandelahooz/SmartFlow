@@ -12,13 +12,13 @@
     </stylesheets>
 
     <Pane fx:id="simulationPane" styleClass="simulation-pane" AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="0.0"/>
 
-    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+    <VBox prefWidth="280.0" styleClass="control-panel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"
           AnchorPane.topAnchor="0.0">
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-section">
             <Button fx:id="backButton" onAction="#goBackToMenu" styleClass="back-button"/>
-            <Label styleClass="title-label" text="Control de Intersección"/>
+            <Label styleClass="title-label" text="Intersección"/>
         </HBox>
 
         <VBox styleClass="form-section">
@@ -32,7 +32,6 @@
             <ComboBox fx:id="vehicleMovementComboBox" maxWidth="1.7976931348623157E308"/>
         </VBox>
 
-        <Pane styleClass="spacer" VBox.vgrow="ALWAYS"/>
 
         <VBox styleClass="button-section">
             <Button fx:id="addVehicleButton" onAction="#addVehicle" styleClass="button-primary" text="AÑADIR"
@@ -40,5 +39,6 @@
             <Button fx:id="addMultipleButton" onAction="#addMultipleVehicles" styleClass="button-primary"
                     text="AÑADIR LOTE" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
         </VBox>
+        <Pane styleClass="spacer" VBox.vgrow="ALWAYS"/>
     </VBox>
 </AnchorPane>

@@ -70,7 +70,7 @@ public class MotorwayViewController {
 
     vehicleTypeWrapper.getItems().setAll(VehicleType.values());
     startPositionWrapper.getItems().setAll(Locations.getMotorwayDirections());
-    movementWrapper.getItems().setAll(VehicleMovement.values());
+    movementWrapper.getItems().setAll(VehicleMovement.getAllMovements());
 
     vehicleTypeComboBox.getSelectionModel().selectFirst();
     startPosition.getSelectionModel().selectFirst();
