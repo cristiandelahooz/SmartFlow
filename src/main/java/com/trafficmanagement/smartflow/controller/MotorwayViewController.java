@@ -9,6 +9,7 @@ import com.trafficmanagement.smartflow.data.model.IntersectionStateManager;
 import com.trafficmanagement.smartflow.data.model.MotorwayIntersection;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
 import com.trafficmanagement.smartflow.ui.ComboBoxWrapper;
+import com.trafficmanagement.smartflow.utils.CompassUtils;
 import com.trafficmanagement.smartflow.utils.ViewsHandler;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +42,7 @@ public class MotorwayViewController {
   private final Group trafficLightsGroup = new Group();
   private final TrafficLightController trafficLightController = new TrafficLightController();
   private final IntersectionStateManager intersectionStateManager = new IntersectionStateManager();
+  private Group compass;
   @FXML private ComboBox<VehicleType> vehicleTypeComboBox;
   @FXML private ComboBox<Locations> startPosition;
   @FXML private ComboBox<VehicleMovement> movementComboBox;
@@ -84,8 +86,18 @@ public class MotorwayViewController {
         .addListener((obs, o, newOrigin) -> updateAvailableIntersections(newOrigin));
     updateAvailableIntersections(startPosition.getValue());
     updateIntersectionSelectorVisibility(movementComboBox.getValue());
-    simulationPane.widthProperty().addListener((obs, o, n) -> redrawMotorway());
-    simulationPane.heightProperty().addListener((obs, o, n) -> redrawMotorway());
+
+    compass = CompassUtils.createCompass();
+    simulationPane.getChildren().add(compass);
+
+    simulationPane.widthProperty().addListener((obs, o, n) -> {
+      redrawMotorway();
+      repositionCompass();
+    });
+    simulationPane.heightProperty().addListener((obs, o, n) -> {
+      redrawMotorway();
+      repositionCompass();
+    });
     startVehicleAnimationLoop();
   }
 
@@ -229,6 +241,12 @@ public class MotorwayViewController {
                 motorwayY + LANE_HEIGHT * LANE_Y_MULTIPLIER_LOWER));
 
     motorwayGroup.toBack();
+  }
+
+  private void repositionCompass() {
+    if (compass != null) {
+      CompassUtils.positionCompass(compass, simulationPane.getWidth(), simulationPane.getHeight());
+    }
   }
 
   private Node createTrafficLight(int id, double x, double y) {
@@ -650,6 +668,7 @@ public class MotorwayViewController {
     for (Vehicle vehicle : vehicleMap.keySet()) vehicle.stop();
     vehicleMap.clear();
     simulationPane.getChildren().clear();
+    compass = null;
     log.info("simulation_cleaned simulationType=motorway");
     ViewsHandler.changeView(ViewsHandler.MAIN_VIEW);
   }

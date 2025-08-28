@@ -7,6 +7,7 @@ import com.trafficmanagement.smartflow.data.enums.VehicleMovement;
 import com.trafficmanagement.smartflow.data.enums.VehicleType;
 import com.trafficmanagement.smartflow.data.model.Intersection;
 import com.trafficmanagement.smartflow.data.model.Vehicle;
+import com.trafficmanagement.smartflow.utils.CompassUtils;
 import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 import com.trafficmanagement.smartflow.utils.ViewsHandler;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ public class IntersectionViewController {
   private final Intersection intersection = new Intersection();
   private final Map<Vehicle, Circle> vehicleMap = new ConcurrentHashMap<>();
   private final Group streetGroup = new Group();
+  private Group compass;
   @FXML private Pane simulationPane;
   @FXML private ComboBox<VehicleType> typeComboBox;
   @FXML private ComboBox<Locations> originComboBox;
@@ -55,11 +57,11 @@ public class IntersectionViewController {
     log.info("simulation_stopping vehicleCount={} simulationType=intersection", vehicleMap.size());
     for (Vehicle vehicle : vehicleMap.keySet()) {
       vehicle.stop();
-
-      vehicleMap.clear();
-      simulationPane.getChildren().clear();
-      log.info("simulation_cleaned simulationType=intersection");
     }
+    vehicleMap.clear();
+    simulationPane.getChildren().clear();
+    compass = null;
+    log.info("simulation_cleaned simulationType=intersection");
     ViewsHandler.changeView(ViewsHandler.MAIN_VIEW);
   }
 
@@ -78,8 +80,17 @@ public class IntersectionViewController {
     FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_LEFT);
     backButton.setGraphic(backIcon);
 
-    simulationPane.widthProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
-    simulationPane.heightProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
+    compass = CompassUtils.createCompass();
+    simulationPane.getChildren().add(compass);
+
+    simulationPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+      redrawStreet();
+      repositionCompass();
+    });
+    simulationPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+      redrawStreet();
+      repositionCompass();
+    });
 
     startAnimationLoop();
   }
@@ -109,6 +120,12 @@ public class IntersectionViewController {
     vLine.setStroke(LANE_DIVIDER_COLOR);
     vLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
     streetGroup.getChildren().addAll(hLine, vLine);
+  }
+
+  private void repositionCompass() {
+    if (compass != null) {
+      CompassUtils.positionCompass(compass, simulationPane.getWidth(), simulationPane.getHeight());
+    }
   }
 
   @FXML

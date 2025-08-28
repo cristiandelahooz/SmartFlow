@@ -246,3 +246,29 @@
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 50%;
 }
+
+.compass {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0.3, 2, 2);
+}
+
+.compass-outer-circle {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #FCD34D 0%, #F59E0B 50%, #92400E 100%);
+    -fx-stroke: #92400E;
+    -fx-stroke-width: 2;
+    -fx-stroke-type: outside;
+}
+
+.compass-inner-circle {
+    -fx-fill: transparent;
+    -fx-stroke: #F59E0B;
+    -fx-stroke-width: 1;
+}
+
+.compass-text {
+    -fx-font-family: "System";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-fill: #92400E;
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.8), 2, 0.5, 1, 1);
+}
