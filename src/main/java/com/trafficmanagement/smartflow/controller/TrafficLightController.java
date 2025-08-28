@@ -27,16 +27,16 @@ public class TrafficLightController {
   private void startCycle() {
     scheduler.scheduleAtFixedRate(
         () -> {
-          toggleLight(1);
-          toggleLight(6);
+          toggleLight(LIGHT_1);
+          toggleLight(LIGHT_6);
 
-          boolean is2Green = lightStates.get(2).get();
-          lightStates.get(2).set(!is2Green);
-          lightStates.get(3).set(is2Green);
+          boolean is2Green = lightStates.get(LIGHT_2).get();
+          lightStates.get(LIGHT_2).set(!is2Green);
+          lightStates.get(LIGHT_2).set(is2Green);
 
-          boolean is4Green = lightStates.get(4).get();
-          lightStates.get(4).set(!is4Green);
-          lightStates.get(5).set(is4Green);
+          boolean is4Green = lightStates.get(LIGHT_4).get();
+          lightStates.get(LIGHT_4).set(!is4Green);
+          lightStates.get(LIGHT_5).set(is4Green);
         },
         INITIAL_DELAY_SECONDS,
         CYCLE_INTERVAL_SECONDS,
