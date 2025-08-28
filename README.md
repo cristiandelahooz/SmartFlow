@@ -34,7 +34,9 @@ The system implements thread-safe traffic simulation using:
 <img width="1538" height="962" alt="image" src="https://github.com/user-attachments/assets/a11cde08-2c71-4e55-a0c2-1c0bd02307b0" />
 
 ## Example
-https://github.com/user-attachments/assets/7a3ff15c-6dfb-4e86-989b-ad3d8afecfbc
+https://github.com/user-attachments/assets/694901b2-788c-470b-a422-7ca2eb82f4a4
+
+
 
 
 
