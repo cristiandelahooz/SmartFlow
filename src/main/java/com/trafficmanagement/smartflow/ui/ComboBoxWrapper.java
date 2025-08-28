@@ -7,11 +7,9 @@ import lombok.Getter;
 
 /**
  * @author cristiandelahoz
- * @created 27/8/25 - 16:11
  */
 public class ComboBoxWrapper<T> {
   @Getter private final ComboBox<T> comboBox;
-  private StringConverter<T> stringConverter;
 
   public ComboBoxWrapper(ComboBox<T> comboBox) {
     this(comboBox, defaultDisplayNameConverter());
@@ -19,7 +17,6 @@ public class ComboBoxWrapper<T> {
 
   public ComboBoxWrapper(ComboBox<T> comboBox, StringConverter<T> stringConverter) {
     this.comboBox = comboBox;
-    this.stringConverter = stringConverter;
     this.comboBox.setConverter(stringConverter);
   }
 

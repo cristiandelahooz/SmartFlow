@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * @author cristiandelahoz
- * @created 27/8/25 - 15:56
  */
 @Getter
 @RequiredArgsConstructor

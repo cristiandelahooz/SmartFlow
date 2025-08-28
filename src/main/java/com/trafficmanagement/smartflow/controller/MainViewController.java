@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author cristiandelahoz
- * @created 27/8/25 - 01:25
  */
 @Slf4j
 public class MainViewController {
