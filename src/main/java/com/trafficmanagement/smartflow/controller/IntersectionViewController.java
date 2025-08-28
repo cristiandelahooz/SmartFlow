@@ -86,7 +86,7 @@ public class IntersectionViewController {
     originComboBox.getSelectionModel().selectFirst();
     vehicleMovementComboBox.getSelectionModel().selectFirst();
 
-    FontIcon backIcon = new FontIcon(FontAwesomeSolid.LONG_ARROW_ALT_LEFT);
+    FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_CIRCLE_LEFT);
     backButton.setGraphic(backIcon);
 
     compass = CompassUtils.createCompass();
