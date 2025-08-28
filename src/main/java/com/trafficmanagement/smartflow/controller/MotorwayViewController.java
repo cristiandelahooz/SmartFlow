@@ -172,7 +172,6 @@ public class MotorwayViewController {
     finalWallSegment.setFill(WALL_COLOR);
     motorwayGroup.getChildren().add(finalWallSegment);
 
-    // Semáforos vía superior (derecha a izquierda), IDs: 4, 2, 1
     trafficLightsGroup
         .getChildren()
         .add(
@@ -201,7 +200,6 @@ public class MotorwayViewController {
                     + TRAFFIC_LIGHT_OFFSET,
                 motorwayY + LANE_HEIGHT * LANE_Y_MULTIPLIER_UPPER));
 
-    // Semáforos vía inferior (izquierda a derecha), IDs: 3, 5, 6
     trafficLightsGroup
         .getChildren()
         .add(
@@ -235,7 +233,7 @@ public class MotorwayViewController {
 
   private Node createTrafficLight(int id, double x, double y) {
     Group lightGroup = new Group();
-    lightGroup.setId(String.valueOf(id)); // ID del grupo para referencia
+    lightGroup.setId(String.valueOf(id));
 
     Rectangle post = new Rectangle(x, y - TRAFFIC_LIGHT_Y_OFFSET, TRAFFIC_LIGHT_POST_WIDTH, TRAFFIC_LIGHT_POST_HEIGHT);
     post.setFill(Color.BLACK);
@@ -477,16 +475,16 @@ public class MotorwayViewController {
   }
 
   private int getLightIdForIntersection(int intersectionId, Direction origin) {
-    if (origin == Direction.WEST) { // Vía inferior
+    if (origin == Direction.WEST) {
       if (intersectionId == INTERSECTION_2) return TRAFFIC_LIGHT_3;
       if (intersectionId == INTERSECTION_3) return TRAFFIC_LIGHT_5;
       if (intersectionId == INTERSECTION_4) return TRAFFIC_LIGHT_6;
-    } else { // Vía superior
+    } else {
       if (intersectionId == INTERSECTION_1) return TRAFFIC_LIGHT_1;
       if (intersectionId == INTERSECTION_2) return TRAFFIC_LIGHT_2;
       if (intersectionId == INTERSECTION_3) return TRAFFIC_LIGHT_4;
     }
-    return -1; // No debería ocurrir
+    return -1;
   }
 
   public Point2D getStopLineForLight(
@@ -560,9 +558,9 @@ public class MotorwayViewController {
       if (leader.getOrigin() == potentialFollower.getOrigin()
           && leader.getLane() == potentialFollower.getLane()) {
         boolean isBehind;
-        if (leader.getOrigin() == Direction.WEST) { // Moviéndose a la derecha
+        if (leader.getOrigin() == Direction.WEST) {
           isBehind = potentialFollower.getX() < leader.getX();
-        } else { // Moviéndose a la izquierda
+        } else {
           isBehind = potentialFollower.getX() > leader.getX();
         }
 

@@ -40,7 +40,6 @@ public class Intersection implements TrafficManager {
   public boolean isMyTurn(Vehicle vehicle) {
     Vehicle activeEmergency = findActiveEmergency();
 
-    // --- LÓGICA DE EMERGENCIA ---
     if (activeEmergency != null) {
       Direction emergencyLane = activeEmergency.getOrigin();
 
@@ -52,7 +51,6 @@ public class Intersection implements TrafficManager {
       }
     }
 
-    // --- LÓGICA FIFO NORMAL ---
     if (!crossingVehicles.isEmpty()) {
       return false;
     }

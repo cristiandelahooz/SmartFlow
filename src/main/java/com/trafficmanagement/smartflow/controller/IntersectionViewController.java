@@ -38,342 +38,375 @@ import com.trafficmanagement.smartflow.utils.MotorwayConstants;
 
 @Slf4j
 public class IntersectionViewController {
-    @FXML
-    private Pane simulationPane;
-    @FXML
-    private ComboBox<VehicleType> typeComboBox;
-    @FXML
-    private ComboBox<Direction> originComboBox;
-    @FXML
-    private ComboBox<VehicleMovement> vehicleMovementComboBox;
-    @FXML
-    private Button addVehicleButton;
-    @FXML
-    private Button addMultipleButton;
-    @FXML
-    private Button backButton;
+  private final Intersection intersection = new Intersection();
+  private final Map<Vehicle, Circle> vehicleMap = new ConcurrentHashMap<>();
+  private final Group streetGroup = new Group();
+  @FXML private Pane simulationPane;
+  @FXML private ComboBox<VehicleType> typeComboBox;
+  @FXML private ComboBox<Direction> originComboBox;
+  @FXML private ComboBox<VehicleMovement> vehicleMovementComboBox;
+  @FXML private Button addVehicleButton;
+  @FXML private Button addMultipleButton;
+  @FXML private Button backButton;
+  private AnimationTimer animationTimer;
 
-    private final Intersection intersection = new Intersection();
-    private final Map<Vehicle, Circle> vehicleMap = new ConcurrentHashMap<>();
-    private final Group streetGroup = new Group();
-
-    private AnimationTimer animationTimer;
-
-    @FXML
-    private void goBackToMenu() {
-        if (animationTimer != null) {
-            animationTimer.stop();
-            log.info("animation_timer_stopped simulationType=intersection");
-        }
-        log.info("simulation_stopping vehicleCount={} simulationType=intersection", vehicleMap.size());
-        for (Vehicle vehicle : vehicleMap.keySet()) {
-            vehicle.stop();
-
-            vehicleMap.clear();
-            simulationPane.getChildren().clear();
-            log.info("simulation_cleaned simulationType=intersection");
-        }
-        ViewsHandler.changeView(ViewsHandler.MAIN_VIEW);
-
+  @FXML
+  private void goBackToMenu() {
+    if (animationTimer != null) {
+      animationTimer.stop();
+      log.info("animation_timer_stopped simulationType=intersection");
     }
+    log.info("simulation_stopping vehicleCount={} simulationType=intersection", vehicleMap.size());
+    for (Vehicle vehicle : vehicleMap.keySet()) {
+      vehicle.stop();
 
-    @FXML
-    public void initialize() {
-        simulationPane.getChildren().add(streetGroup);
-
-        typeComboBox.getItems().setAll(VehicleType.values());
-        originComboBox.getItems().setAll(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
-        vehicleMovementComboBox.getItems().setAll(VehicleMovement.values());
-        typeComboBox.getSelectionModel().selectFirst();
-        originComboBox.getSelectionModel().selectFirst();
-        vehicleMovementComboBox.getSelectionModel().selectFirst();
-        FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_LEFT);
-        backButton.setGraphic(backIcon);
-
-        simulationPane.widthProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
-        simulationPane.heightProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
-
-        startAnimationLoop();
+      vehicleMap.clear();
+      simulationPane.getChildren().clear();
+      log.info("simulation_cleaned simulationType=intersection");
     }
+    ViewsHandler.changeView(ViewsHandler.MAIN_VIEW);
+  }
 
-    private void redrawStreet() {
-        streetGroup.getChildren().clear();
+  @FXML
+  public void initialize() {
+    simulationPane.getChildren().add(streetGroup);
 
-        double width = simulationPane.getWidth();
-        double height = simulationPane.getHeight();
-        if (width == 0 || height == 0)
-            return;
+    typeComboBox.getItems().setAll(VehicleType.values());
+    originComboBox
+        .getItems()
+        .setAll(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+    vehicleMovementComboBox.getItems().setAll(VehicleMovement.values());
+    typeComboBox.getSelectionModel().selectFirst();
+    originComboBox.getSelectionModel().selectFirst();
+    vehicleMovementComboBox.getSelectionModel().selectFirst();
+    FontIcon backIcon = new FontIcon(FontAwesomeSolid.ARROW_LEFT);
+    backButton.setGraphic(backIcon);
 
-        double streetWidth = Math.min(width, height) / STREET_WIDTH_DIVISOR;
+    simulationPane.widthProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
+    simulationPane.heightProperty().addListener((obs, oldVal, newVal) -> redrawStreet());
 
-        Rectangle hStreet = new Rectangle(0, height / 2 - streetWidth / 2, width, streetWidth);
-        Rectangle vStreet = new Rectangle(width / 2 - streetWidth / 2, 0, streetWidth, height);
-        hStreet.setFill(STREET_COLOR);
-        vStreet.setFill(STREET_COLOR);
-        hStreet.setStroke(STREET_STROKE_COLOR);
-        vStreet.setStroke(STREET_STROKE_COLOR);
-        streetGroup.getChildren().addAll(hStreet, vStreet);
+    startAnimationLoop();
+  }
 
-        Line hLine = new Line(0, height / 2, width, height / 2);
-        hLine.setStroke(LANE_DIVIDER_COLOR);
-        hLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
+  private void redrawStreet() {
+    streetGroup.getChildren().clear();
 
-        Line vLine = new Line(width / 2, 0, width / 2, height);
-        vLine.setStroke(LANE_DIVIDER_COLOR);
-        vLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
-        streetGroup.getChildren().addAll(hLine, vLine);
+    double width = simulationPane.getWidth();
+    double height = simulationPane.getHeight();
+    if (width == 0 || height == 0) return;
 
-        streetGroup.getChildren()
-                .add(createStopSign(width / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, height / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_EAST)); // East
-        streetGroup.getChildren()
-                .add(createStopSign(width / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, height / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_WEST)); // West
-        streetGroup.getChildren()
-                .add(createStopSign(width / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, height / 2 - streetWidth / 2 - STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_NORTH)); // North
-        streetGroup.getChildren()
-                .add(createStopSign(width / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, height / 2 + streetWidth / 2 + STOP_SIGN_OFFSET, STOP_SIGN_ROTATION_SOUTH)); // South
-    }
+    double streetWidth = Math.min(width, height) / STREET_WIDTH_DIVISOR;
 
-    private Group createStopSign(double x, double y, double angle) {
-        double scale = STOP_SIGN_SCALE;
-        Polygon octagon = new Polygon(
-                STOP_SIGN_OCTAGON_SIZE * scale, 0, STOP_SIGN_OCTAGON_OFFSET * scale, 0, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_SIZE * scale, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_OFFSET * scale,
-                STOP_SIGN_OCTAGON_OFFSET * scale, STOP_SIGN_OCTAGON_CORNER * scale, STOP_SIGN_OCTAGON_SIZE * scale, STOP_SIGN_OCTAGON_CORNER * scale, 0, STOP_SIGN_OCTAGON_OFFSET * scale, 0, STOP_SIGN_OCTAGON_SIZE * scale);
-        octagon.setFill(STOP_SIGN_COLOR);
-        octagon.setStroke(STOP_SIGN_STROKE_COLOR);
-        octagon.setStrokeWidth(STOP_SIGN_STROKE_WIDTH);
+    Rectangle hStreet = new Rectangle(0, height / 2 - streetWidth / 2, width, streetWidth);
+    Rectangle vStreet = new Rectangle(width / 2 - streetWidth / 2, 0, streetWidth, height);
+    hStreet.setFill(STREET_COLOR);
+    vStreet.setFill(STREET_COLOR);
+    hStreet.setStroke(STREET_STROKE_COLOR);
+    vStreet.setStroke(STREET_STROKE_COLOR);
+    streetGroup.getChildren().addAll(hStreet, vStreet);
 
-        Text text = new Text(STOP_SIGN_TEXT);
-        text.setFont(Font.font(STOP_SIGN_FONT_FAMILY, STOP_SIGN_TEXT_SIZE * scale));
-        text.setFill(STOP_SIGN_TEXT_COLOR);
-        text.setX(STOP_SIGN_TEXT_X_OFFSET * scale);
-        text.setY(STOP_SIGN_TEXT_Y_OFFSET * scale);
+    Line hLine = new Line(0, height / 2, width, height / 2);
+    hLine.setStroke(LANE_DIVIDER_COLOR);
+    hLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
 
-        Rectangle pole = new Rectangle();
-        pole.setX(STOP_SIGN_POLE_X_OFFSET * scale);
-        pole.setY(STOP_SIGN_POLE_Y_OFFSET * scale);
-        pole.setWidth(STOP_SIGN_POLE_WIDTH * scale);
-        pole.setHeight(STOP_SIGN_POLE_HEIGHT * scale);
-        pole.setFill(STOP_SIGN_POLE_COLOR);
+    Line vLine = new Line(width / 2, 0, width / 2, height);
+    vLine.setStroke(LANE_DIVIDER_COLOR);
+    vLine.getStrokeDashArray().addAll(DASH_LENGTH, DASH_SPACING);
+    streetGroup.getChildren().addAll(hLine, vLine);
+  }
 
-        Group sign = new Group(octagon, text, pole);
-        sign.relocate(x - STOP_SIGN_CENTER_OFFSET * scale, y - STOP_SIGN_CENTER_OFFSET * scale);
-        sign.getTransforms().add(new Rotate(angle, STOP_SIGN_CENTER_OFFSET * scale, STOP_SIGN_CENTER_OFFSET * scale));
-        return sign;
-    }
+  private Group createStopSign(double x, double y, double angle) {
+    double scale = STOP_SIGN_SCALE;
+    Polygon octagon =
+        new Polygon(
+            STOP_SIGN_OCTAGON_SIZE * scale,
+            0,
+            STOP_SIGN_OCTAGON_OFFSET * scale,
+            0,
+            STOP_SIGN_OCTAGON_CORNER * scale,
+            STOP_SIGN_OCTAGON_SIZE * scale,
+            STOP_SIGN_OCTAGON_CORNER * scale,
+            STOP_SIGN_OCTAGON_OFFSET * scale,
+            STOP_SIGN_OCTAGON_OFFSET * scale,
+            STOP_SIGN_OCTAGON_CORNER * scale,
+            STOP_SIGN_OCTAGON_SIZE * scale,
+            STOP_SIGN_OCTAGON_CORNER * scale,
+            0,
+            STOP_SIGN_OCTAGON_OFFSET * scale,
+            0,
+            STOP_SIGN_OCTAGON_SIZE * scale);
+    octagon.setFill(STOP_SIGN_COLOR);
+    octagon.setStroke(STOP_SIGN_STROKE_COLOR);
+    octagon.setStrokeWidth(STOP_SIGN_STROKE_WIDTH);
 
-    @FXML
-    private void addVehicle() {
-        disableButtonsTemporarily();
-        createAndStartVehicle(
-                typeComboBox.getValue(),
-                originComboBox.getValue(),
-                vehicleMovementComboBox.getValue());
-    }
+    Text text = new Text(STOP_SIGN_TEXT);
+    text.setFont(Font.font(STOP_SIGN_FONT_FAMILY, STOP_SIGN_TEXT_SIZE * scale));
+    text.setFill(STOP_SIGN_TEXT_COLOR);
+    text.setX(STOP_SIGN_TEXT_X_OFFSET * scale);
+    text.setY(STOP_SIGN_TEXT_Y_OFFSET * scale);
 
-    private void createAndStartVehicle(VehicleType type, Direction origin, VehicleMovement movement) {
-        // 1. Crea el objeto lógico del vehículo
-        Vehicle vehicle = new Vehicle(type, origin, movement, intersection);
-        vehicle.setController(this);
+    Rectangle pole = new Rectangle();
+    pole.setX(STOP_SIGN_POLE_X_OFFSET * scale);
+    pole.setY(STOP_SIGN_POLE_Y_OFFSET * scale);
+    pole.setWidth(STOP_SIGN_POLE_WIDTH * scale);
+    pole.setHeight(STOP_SIGN_POLE_HEIGHT * scale);
+    pole.setFill(STOP_SIGN_POLE_COLOR);
 
-        // 2. Crea su representación visual
-        Circle vehicleCircle = new Circle(VEHICLE_RADIUS,
-                type == VehicleType.EMERGENCY ? Color.web(MotorwayConstants.EMERGENCY_VEHICLE_COLOR) : Color.web(MotorwayConstants.NORMAL_VEHICLE_COLOR));
-        vehicleCircle.setStroke(MotorwayConstants.VEHICLE_STROKE_COLOR);
+    Group sign = new Group(octagon, text, pole);
+    sign.relocate(x - STOP_SIGN_CENTER_OFFSET * scale, y - STOP_SIGN_CENTER_OFFSET * scale);
+    sign.getTransforms()
+        .add(new Rotate(angle, STOP_SIGN_CENTER_OFFSET * scale, STOP_SIGN_CENTER_OFFSET * scale));
+    return sign;
+  }
 
-        // 3. Obtiene su ruta y posición inicial
-        List<Point2D> path = getPath(origin, movement);
-        if (path.isEmpty())
-            return; // No crea el vehículo si no hay una ruta válida
+  @FXML
+  private void addVehicle() {
+    disableButtonsTemporarily();
+    createAndStartVehicle(
+        typeComboBox.getValue(), originComboBox.getValue(), vehicleMovementComboBox.getValue());
+  }
 
-        Point2D startPos = path.getFirst();
-        vehicle.setPosition(startPos.getX(), startPos.getY());
+  private void createAndStartVehicle(VehicleType type, Direction origin, VehicleMovement movement) {
+    Vehicle vehicle = new Vehicle(type, origin, movement, intersection);
+    vehicle.setController(this);
 
-        // 4. Lo añade a las colecciones y a la pantalla
-        vehicleMap.put(vehicle, vehicleCircle);
-        simulationPane.getChildren().add(vehicleCircle);
-        vehicleCircle.toFront();
+    Circle vehicleCircle =
+        new Circle(
+            VEHICLE_RADIUS,
+            type == VehicleType.EMERGENCY
+                ? Color.web(MotorwayConstants.EMERGENCY_VEHICLE_COLOR)
+                : Color.web(MotorwayConstants.NORMAL_VEHICLE_COLOR));
+    vehicleCircle.setStroke(MotorwayConstants.VEHICLE_STROKE_COLOR);
 
-        // 5. Inicia el hilo del vehículo
-        new Thread(vehicle).start();
-    }
+    List<Point2D> path = getPath(origin, movement);
+    if (path.isEmpty()) return;
 
-    @FXML
-    private void addMultipleVehicles() {
-        disableButtonsTemporarily();
-        final int numberOfVehiclesToAdd = MULTIPLE_VEHICLES_COUNT;
-        log.info("batch_vehicle_creation_started count={} simulationType=intersection", numberOfVehiclesToAdd);
-        final Random random = new Random();
+    Point2D startPos = path.getFirst();
+    vehicle.setPosition(startPos.getX(), startPos.getY());
 
-        new Thread(() -> {
-            try {
-                Direction[] origins = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
+    vehicleMap.put(vehicle, vehicleCircle);
+    simulationPane.getChildren().add(vehicleCircle);
+    vehicleCircle.toFront();
+
+    new Thread(vehicle).start();
+  }
+
+  @FXML
+  private void addMultipleVehicles() {
+    disableButtonsTemporarily();
+    final int numberOfVehiclesToAdd = MULTIPLE_VEHICLES_COUNT;
+    log.info(
+        "batch_vehicle_creation_started count={} simulationType=intersection",
+        numberOfVehiclesToAdd);
+    final Random random = new Random();
+
+    new Thread(
+            () -> {
+              try {
+                Direction[] origins = {
+                  Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
+                };
                 VehicleMovement[] movements = VehicleMovement.values();
 
                 for (int ind = 0; ind < numberOfVehiclesToAdd; ind++) {
-                    // Genera propiedades aleatorias para el nuevo vehículo
-                    Direction randomOrigin = origins[random.nextInt(origins.length)];
-                    VehicleMovement randomDestination = movements[random.nextInt(movements.length)];
+                  Direction randomOrigin = origins[random.nextInt(origins.length)];
+                  VehicleMovement randomDestination = movements[random.nextInt(movements.length)];
 
-                    VehicleType randomType = (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
+                  VehicleType randomType =
+                      (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0)
+                          ? VehicleType.EMERGENCY
+                          : VehicleType.NORMAL;
 
-                    Platform.runLater(() -> createAndStartVehicle(randomType, randomOrigin, randomDestination));
+                  Platform.runLater(
+                      () -> createAndStartVehicle(randomType, randomOrigin, randomDestination));
 
-                    Thread.sleep(VEHICLE_SPAWN_DELAY_MS);
+                  Thread.sleep(VEHICLE_SPAWN_DELAY_MS);
                 }
-            } catch (InterruptedException e) {
+              } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-            }
-            log.info("batch_vehicle_creation_completed count={} simulationType=intersection", numberOfVehiclesToAdd);
-        }).start();
-    }
+              }
+              log.info(
+                  "batch_vehicle_creation_completed count={} simulationType=intersection",
+                  numberOfVehiclesToAdd);
+            })
+        .start();
+  }
 
-    private void startAnimationLoop() {
-        this.animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                Iterator<Map.Entry<Vehicle, Circle>> iterator = vehicleMap.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry<Vehicle, Circle> entry = iterator.next();
-                    if (entry.getKey().isFinished()) {
-                        simulationPane.getChildren().remove(entry.getValue());
-                        iterator.remove();
-                    } else {
-                        entry.getValue().relocate(entry.getKey().getX() - VEHICLE_VISUAL_OFFSET, entry.getKey().getY() - VEHICLE_VISUAL_OFFSET);
-                    }
-                }
+  private void startAnimationLoop() {
+    this.animationTimer =
+        new AnimationTimer() {
+          @Override
+          public void handle(long now) {
+            Iterator<Map.Entry<Vehicle, Circle>> iterator = vehicleMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+              Map.Entry<Vehicle, Circle> entry = iterator.next();
+              if (entry.getKey().isFinished()) {
+                simulationPane.getChildren().remove(entry.getValue());
+                iterator.remove();
+              } else {
+                entry
+                    .getValue()
+                    .relocate(
+                        entry.getKey().getX() - VEHICLE_VISUAL_OFFSET,
+                        entry.getKey().getY() - VEHICLE_VISUAL_OFFSET);
+              }
             }
+          }
         };
-        this.animationTimer.start();
-    }
+    this.animationTimer.start();
+  }
 
-    private void disableButtonsTemporarily() {
-        addVehicleButton.setDisable(true);
-        addMultipleButton.setDisable(true);
+  private void disableButtonsTemporarily() {
+    addVehicleButton.setDisable(true);
+    addMultipleButton.setDisable(true);
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(BUTTON_DISABLE_DURATION_SECONDS));
+    PauseTransition pause = new PauseTransition(Duration.seconds(BUTTON_DISABLE_DURATION_SECONDS));
 
-        pause.setOnFinished(event -> {
-            addVehicleButton.setDisable(false);
-            addMultipleButton.setDisable(false);
+    pause.setOnFinished(
+        event -> {
+          addVehicleButton.setDisable(false);
+          addMultipleButton.setDisable(false);
         });
 
-        pause.play();
+    pause.play();
+  }
+
+  public List<Point2D> getPath(Direction origin, VehicleMovement movement) {
+    double width = simulationPane.getWidth();
+    double height = simulationPane.getHeight();
+    if (width == 0 || height == 0) return List.of();
+
+    double streetW = Math.min(width, height) / STREET_WIDTH_DIVISOR;
+    final double STOP_GAP = STOP_LINE_GAP;
+    double N_IN_X = width / 2 - streetW / 4;
+    double N_OUT_X = width / 2 + streetW / 4;
+    double S_IN_X = width / 2 + streetW / 4;
+    double S_OUT_X = width / 2 - streetW / 4;
+    double E_IN_Y = height / 2 - streetW / 4;
+    double E_OUT_Y = height / 2 + streetW / 4;
+    double W_IN_Y = height / 2 + streetW / 4;
+    double W_OUT_Y = height / 2 - streetW / 4;
+
+    Point2D stopN = new Point2D(N_IN_X, height / 2 - streetW / 2 - STOP_GAP);
+    Point2D stopS = new Point2D(S_IN_X, height / 2 + streetW / 2 + STOP_GAP);
+    Point2D stopE = new Point2D(width / 2 + streetW / 2 + STOP_GAP, E_IN_Y);
+    Point2D stopW = new Point2D(width / 2 - streetW / 2 - STOP_GAP, W_IN_Y);
+
+    Point2D exitN = new Point2D(N_OUT_X, -ENTRY_EXIT_OFFSET);
+    Point2D exitS = new Point2D(S_OUT_X, height + ENTRY_EXIT_OFFSET);
+    Point2D exitE = new Point2D(width + ENTRY_EXIT_OFFSET, E_OUT_Y);
+    Point2D exitW = new Point2D(-ENTRY_EXIT_OFFSET, W_OUT_Y);
+    if (movement.equals(VehicleMovement.U_TURN)) {
+      switch (origin) {
+        case NORTH:
+          return List.of(
+              new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET),
+              stopN,
+              new Point2D(N_OUT_X, stopN.getY() + STOP_GAP),
+              exitN);
+        case SOUTH:
+          return List.of(
+              new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET),
+              stopS,
+              new Point2D(S_OUT_X, stopS.getY() - STOP_GAP),
+              exitS);
+        case EAST:
+          return List.of(
+              new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y),
+              stopE,
+              new Point2D(stopE.getX() - STOP_GAP, E_OUT_Y),
+              exitE);
+        case WEST:
+          return List.of(
+              new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y),
+              stopW,
+              new Point2D(stopW.getX() + STOP_GAP, W_OUT_Y),
+              exitW);
+        default:
+          break;
+      }
     }
 
-    public List<Point2D> getPath(Direction origin, VehicleMovement movement) {
-        double width = simulationPane.getWidth();
-        double height = simulationPane.getHeight();
-        if (width == 0 || height == 0)
-            return List.of();
-
-        double streetW = Math.min(width, height) / STREET_WIDTH_DIVISOR;
-        final double STOP_GAP = STOP_LINE_GAP;
-        // Viniendo del NORTE: carril izquierdo de la pantalla (su derecha)
-        double N_IN_X = width / 2 - streetW / 4;
-        double N_OUT_X = width / 2 + streetW / 4;
-        // Viniendo del SUR: carril derecho de la pantalla (su derecha)
-        double S_IN_X = width / 2 + streetW / 4;
-        double S_OUT_X = width / 2 - streetW / 4;
-        // Viniendo del ESTE: carril superior de la pantalla (su derecha)
-        double E_IN_Y = height / 2 - streetW / 4;
-        double E_OUT_Y = height / 2 + streetW / 4;
-        // Viniendo del OESTE: carril inferior de la pantalla (su derecha)
-        double W_IN_Y = height / 2 + streetW / 4;
-        double W_OUT_Y = height / 2 - streetW / 4;
-
-        Point2D stopN = new Point2D(N_IN_X, height / 2 - streetW / 2 - STOP_GAP);
-        Point2D stopS = new Point2D(S_IN_X, height / 2 + streetW / 2 + STOP_GAP);
-        Point2D stopE = new Point2D(width / 2 + streetW / 2 + STOP_GAP, E_IN_Y);
-        Point2D stopW = new Point2D(width / 2 - streetW / 2 - STOP_GAP, W_IN_Y);
-
-        Point2D exitN = new Point2D(N_OUT_X, -ENTRY_EXIT_OFFSET);
-        Point2D exitS = new Point2D(S_OUT_X, height + ENTRY_EXIT_OFFSET);
-        Point2D exitE = new Point2D(width + ENTRY_EXIT_OFFSET, E_OUT_Y);
-        Point2D exitW = new Point2D(-ENTRY_EXIT_OFFSET, W_OUT_Y);
-        if (movement.equals(VehicleMovement.U_TURN)) {
-            switch (origin) {
-                case NORTH:
-                    return List.of(new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET), stopN, new Point2D(N_OUT_X, stopN.getY() + STOP_GAP),
-                            exitN);
-                case SOUTH:
-                    return List.of(new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET), stopS,
-                            new Point2D(S_OUT_X, stopS.getY() - STOP_GAP), exitS);
-                case EAST:
-                    return List.of(new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y), stopE,
-                            new Point2D(stopE.getX() - STOP_GAP, E_OUT_Y), exitE);
-                case WEST:
-                    return List.of(new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y), stopW, new Point2D(stopW.getX() + STOP_GAP, W_OUT_Y),
-                            exitW);
-                default:
-                    break;
-            }
+    switch (origin) {
+      case NORTH:
+        Point2D startN = new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET);
+        Point2D enterN = new Point2D(N_IN_X, stopN.getY() + STOP_GAP);
+        switch (movement) {
+          case STRAIGHT:
+            return List.of(startN, stopN, new Point2D(N_IN_X, stopS.getY()), exitS);
+          case TURN_RIGHT:
+            return List.of(startN, stopN, enterN, new Point2D(stopW.getX(), W_OUT_Y), exitW);
+          case TURN_LEFT:
+            return List.of(
+                startN,
+                stopN,
+                new Point2D(N_IN_X, E_OUT_Y),
+                new Point2D(stopE.getX(), E_OUT_Y),
+                exitE);
+          default:
+            break;
         }
-
-        switch (origin) {
-            case NORTH:
-                Point2D startN = new Point2D(N_IN_X, -ENTRY_EXIT_OFFSET);
-                Point2D enterN = new Point2D(N_IN_X, stopN.getY() + STOP_GAP);
-                switch (movement) {
-                    case STRAIGHT:
-                        return List.of(startN, stopN, new Point2D(N_IN_X, stopS.getY()), exitS);
-                case TURN_RIGHT:
-                        return List.of(startN, stopN, enterN, new Point2D(stopW.getX(), W_OUT_Y), exitW);
-                case TURN_LEFT:
-                        return List.of(startN, stopN, new Point2D(N_IN_X, E_OUT_Y), new Point2D(stopE.getX(), E_OUT_Y),
-                                exitE);
-                    default:
-                        break;
-                }
-                break;
-            case SOUTH:
-                Point2D startS = new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET);
-                Point2D enterS = new Point2D(S_IN_X, stopS.getY() - STOP_GAP);
-                switch (movement) {
-                    case STRAIGHT:
-                        return List.of(startS, stopS, new Point2D(S_IN_X, stopN.getY()), exitN);
-                case TURN_RIGHT:
-                        return List.of(startS, stopS, enterS, new Point2D(stopE.getX(), E_OUT_Y), exitE);
-                case TURN_LEFT:
-                        return List.of(startS, stopS, new Point2D(S_IN_X, W_OUT_Y), new Point2D(stopW.getX(), W_OUT_Y),
-                                exitW);
-                    default:
-                        break;
-                }
-                break;
-            case EAST:
-                Point2D startE = new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y);
-                Point2D enterE = new Point2D(stopE.getX() - STOP_GAP, E_IN_Y);
-                switch (movement) {
-                    case STRAIGHT:
-                        return List.of(startE, stopE, new Point2D(stopW.getX(), E_IN_Y), exitW);
-                case TURN_RIGHT:
-                        return List.of(startE, stopE, new Point2D(N_OUT_X, E_IN_Y), new Point2D(N_OUT_X, stopN.getY()),
-                                exitN);
-                case TURN_LEFT:
-
-                        return List.of(startE, stopE, enterE, new Point2D(S_OUT_X, stopS.getY()), exitS);
-                    default:
-                        break;
-                }
-                break;
-            case WEST:
-                Point2D startW = new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y);
-                Point2D enterW = new Point2D(stopW.getX() + STOP_GAP, W_IN_Y);
-                switch (movement) {
-                    case STRAIGHT:
-                        return List.of(startW, stopW, new Point2D(stopE.getX(), W_IN_Y), exitE);
-                case TURN_RIGHT:
-                        return List.of(startW, stopW, new Point2D(S_OUT_X, W_IN_Y), new Point2D(S_OUT_X, stopS.getY()),
-                                exitS);
-                case TURN_LEFT:
-                        return List.of(startW, stopW, enterW, new Point2D(N_OUT_X, stopN.getY()), exitN);
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
+        break;
+      case SOUTH:
+        Point2D startS = new Point2D(S_IN_X, height + ENTRY_EXIT_OFFSET);
+        Point2D enterS = new Point2D(S_IN_X, stopS.getY() - STOP_GAP);
+        switch (movement) {
+          case STRAIGHT:
+            return List.of(startS, stopS, new Point2D(S_IN_X, stopN.getY()), exitN);
+          case TURN_RIGHT:
+            return List.of(startS, stopS, enterS, new Point2D(stopE.getX(), E_OUT_Y), exitE);
+          case TURN_LEFT:
+            return List.of(
+                startS,
+                stopS,
+                new Point2D(S_IN_X, W_OUT_Y),
+                new Point2D(stopW.getX(), W_OUT_Y),
+                exitW);
+          default:
+            break;
         }
-        return List.of(new Point2D(0, 0));
+        break;
+      case EAST:
+        Point2D startE = new Point2D(width + ENTRY_EXIT_OFFSET, E_IN_Y);
+        Point2D enterE = new Point2D(stopE.getX() - STOP_GAP, E_IN_Y);
+        switch (movement) {
+          case STRAIGHT:
+            return List.of(startE, stopE, new Point2D(stopW.getX(), E_IN_Y), exitW);
+          case TURN_RIGHT:
+            return List.of(
+                startE,
+                stopE,
+                new Point2D(N_OUT_X, E_IN_Y),
+                new Point2D(N_OUT_X, stopN.getY()),
+                exitN);
+          case TURN_LEFT:
+            return List.of(startE, stopE, enterE, new Point2D(S_OUT_X, stopS.getY()), exitS);
+          default:
+            break;
+        }
+        break;
+      case WEST:
+        Point2D startW = new Point2D(-ENTRY_EXIT_OFFSET, W_IN_Y);
+        Point2D enterW = new Point2D(stopW.getX() + STOP_GAP, W_IN_Y);
+        switch (movement) {
+          case STRAIGHT:
+            return List.of(startW, stopW, new Point2D(stopE.getX(), W_IN_Y), exitE);
+          case TURN_RIGHT:
+            return List.of(
+                startW,
+                stopW,
+                new Point2D(S_OUT_X, W_IN_Y),
+                new Point2D(S_OUT_X, stopS.getY()),
+                exitS);
+          case TURN_LEFT:
+            return List.of(startW, stopW, enterW, new Point2D(N_OUT_X, stopN.getY()), exitN);
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
     }
+    return List.of(new Point2D(0, 0));
+  }
 }
