@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Slf4j
+/**
+ * @author cristiandelahooz
+ */
 public class MotorwayIntersection implements TrafficManager {
   private final int id;
   private final ReentrantLock lock = new ReentrantLock(true);
@@ -160,16 +163,6 @@ public class MotorwayIntersection implements TrafficManager {
     } finally {
       lock.unlock();
     }
-  }
-
-  public boolean hasEmergencyVehicleWaiting() {
-    boolean westQueueHasEmergency =
-        waitingLanes.get(Locations.WEST).get(Locations.FIRST_RAIL).stream()
-            .anyMatch(v -> v.getType() == VehicleType.EMERGENCY);
-    boolean eastQueueHasEmergency =
-        waitingLanes.get(Locations.EAST).get(Locations.FIRST_RAIL).stream()
-            .anyMatch(v -> v.getType() == VehicleType.EMERGENCY);
-    return westQueueHasEmergency || eastQueueHasEmergency;
   }
 
   private boolean isDirectionCompletelyClear(Locations origin) {
