@@ -2,6 +2,14 @@
 
 This project is a distributed and concurrent system for simulating and managing urban traffic, with a focus on preventing collisions and prioritizing emergency vehicles.
 
+## Run guide
+| Command    | Description             |
+|------------|-------------------------|
+| make help  | Shows this help message |
+| make build | Builds the project      |
+| make run   | Runs the application    |
+| make clean | Cleans the project      |
+
 ## Scenario 1: 4-Way Intersection
 
 The current implementation focuses on a 4-way intersection with the following characteristics:
@@ -171,3 +179,5 @@ https://github.com/user-attachments/assets/1fe59e19-6764-4d30-9fd2-46b7fccbbd40
                     └── inputFiles.lst
 
 ```
+
+
