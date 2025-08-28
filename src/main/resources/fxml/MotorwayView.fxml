@@ -25,10 +25,10 @@
             <Label text="Posición de salida" />
             <ComboBox fx:id="startPosition" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
 
-            <Label text="Acción en Intersección" />
+            <Label text="Acción" />
             <ComboBox fx:id="movementComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" />
 
-            <Label fx:id="intersectionLabel" text="Número de Intersección (1-4)" />
+            <Label fx:id="intersectionLabel" text="Intersección" />
             <ComboBox fx:id="intersectionComboBox" styleClass="combo-box" maxWidth="1.7976931348623157E308" prefWidth="218.0" />
         </VBox>
 

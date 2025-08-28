@@ -59,7 +59,8 @@ public class MotorwayViewController {
 
   @FXML
   public void initialize() {
-    for (int ind = FIRST_INTERSECTION; ind <= TOTAL_INTERSECTIONS; ind++) intersections.add(new MotorwayIntersection(ind));
+    for (int ind = FIRST_INTERSECTION; ind <= TOTAL_INTERSECTIONS; ind++)
+      intersections.add(new MotorwayIntersection(ind));
     log.info("motorway_controller_initialized intersectionCount=4 simulationType=motorway");
 
     simulationPane.getChildren().addAll(motorwayGroup, trafficLightsGroup);
@@ -90,14 +91,20 @@ public class MotorwayViewController {
     compass = CompassUtils.createCompass();
     simulationPane.getChildren().add(compass);
 
-    simulationPane.widthProperty().addListener((obs, o, n) -> {
-      redrawMotorway();
-      repositionCompass();
-    });
-    simulationPane.heightProperty().addListener((obs, o, n) -> {
-      redrawMotorway();
-      repositionCompass();
-    });
+    simulationPane
+        .widthProperty()
+        .addListener(
+            (obs, o, n) -> {
+              redrawMotorway();
+              repositionCompass();
+            });
+    simulationPane
+        .heightProperty()
+        .addListener(
+            (obs, o, n) -> {
+              redrawMotorway();
+              repositionCompass();
+            });
     startVehicleAnimationLoop();
   }
 
@@ -154,7 +161,11 @@ public class MotorwayViewController {
     for (int ind = FIRST_INTERSECTION; ind <= TOTAL_INTERSECTIONS; ind++) {
       double centerX = getIntersectionCenterX(ind, width);
       Rectangle vStreet =
-          new Rectangle(centerX - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR, 0, INTERSECTION_WIDTH, height);
+          new Rectangle(
+              centerX - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR,
+              0,
+              INTERSECTION_WIDTH,
+              height);
       vStreet.setFill(MOTORWAY_COLOR);
       motorwayGroup.getChildren().add(vStreet);
     }
@@ -253,14 +264,26 @@ public class MotorwayViewController {
     Group lightGroup = new Group();
     lightGroup.setId(String.valueOf(id));
 
-    Rectangle post = new Rectangle(x, y - TRAFFIC_LIGHT_Y_OFFSET, TRAFFIC_LIGHT_POST_WIDTH, TRAFFIC_LIGHT_POST_HEIGHT);
+    Rectangle post =
+        new Rectangle(
+            x, y - TRAFFIC_LIGHT_Y_OFFSET, TRAFFIC_LIGHT_POST_WIDTH, TRAFFIC_LIGHT_POST_HEIGHT);
     post.setFill(Color.BLACK);
     post.setArcWidth(5);
     post.setArcHeight(5);
 
-    Circle red = new Circle(x + TRAFFIC_LIGHT_X_CENTER_OFFSET, y + TRAFFIC_LIGHT_Y_UPPER_OFFSET, TRAFFIC_LIGHT_RADIUS, TRAFFIC_LIGHT_RED_OFF);
+    Circle red =
+        new Circle(
+            x + TRAFFIC_LIGHT_X_CENTER_OFFSET,
+            y + TRAFFIC_LIGHT_Y_UPPER_OFFSET,
+            TRAFFIC_LIGHT_RADIUS,
+            TRAFFIC_LIGHT_RED_OFF);
     red.setId("red");
-    Circle green = new Circle(x + TRAFFIC_LIGHT_X_CENTER_OFFSET, y + TRAFFIC_LIGHT_Y_LOWER_OFFSET, TRAFFIC_LIGHT_RADIUS, TRAFFIC_LIGHT_GREEN_OFF);
+    Circle green =
+        new Circle(
+            x + TRAFFIC_LIGHT_X_CENTER_OFFSET,
+            y + TRAFFIC_LIGHT_Y_LOWER_OFFSET,
+            TRAFFIC_LIGHT_RADIUS,
+            TRAFFIC_LIGHT_GREEN_OFF);
     green.setId("green");
 
     lightGroup.getChildren().addAll(post, red, green);
@@ -306,18 +329,19 @@ public class MotorwayViewController {
   @FXML
   private void addMultipleVehicles() {
     disableVehicleCreationButtonsTemporarily();
-    final int numVehicles = MULTIPLE_VEHICLES_COUNT;
     final Random random = new Random();
     VehicleMovement[] movements = VehicleMovement.getAllMovements();
-    log.info("batch_vehicle_creation_started count={} simulationType=motorway", numVehicles);
+    log.info("batch_vehicle_creation_started count={} simulationType=motorway", MULTIPLE_VEHICLES_COUNT);
     new Thread(
             () -> {
               try {
-                for (int ind = 0; ind < numVehicles; ind++) {
+                for (int ind = 0; ind < MULTIPLE_VEHICLES_COUNT; ind++) {
                   Locations origin = random.nextBoolean() ? Locations.WEST : Locations.EAST;
                   VehicleMovement movement = movements[random.nextInt(movements.length)];
                   VehicleType type =
-                      (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0) ? VehicleType.EMERGENCY : VehicleType.NORMAL;
+                      (random.nextInt(EMERGENCY_VEHICLE_PROBABILITY) == 0)
+                          ? VehicleType.EMERGENCY
+                          : VehicleType.NORMAL;
 
                   Locations lane;
                   if (movement.equals(VehicleMovement.U_TURN)
@@ -329,25 +353,26 @@ public class MotorwayViewController {
                   if (movement != VehicleMovement.STRAIGHT) {
                     List<Integer> possibleIntersections = new ArrayList<>();
                     if (origin == Locations.WEST)
-                      possibleIntersections.addAll(Arrays.asList(INTERSECTION_2, INTERSECTION_3, INTERSECTION_4));
-                    else possibleIntersections.addAll(Arrays.asList(INTERSECTION_1, INTERSECTION_2, INTERSECTION_3));
+                      possibleIntersections.addAll(
+                          Arrays.asList(INTERSECTION_2, INTERSECTION_3, INTERSECTION_4));
+                    else
+                      possibleIntersections.addAll(
+                          Arrays.asList(INTERSECTION_1, INTERSECTION_2, INTERSECTION_3));
                     intersectionId =
                         possibleIntersections.get(random.nextInt(possibleIntersections.size()));
                   }
 
                   final Integer finalIntersectionId = intersectionId;
-                  final Locations finalLane = lane;
                   Platform.runLater(
                       () ->
-                          createAndStartVehicle(
-                              type, origin, finalLane, movement, finalIntersectionId));
+                          createAndStartVehicle(type, origin, lane, movement, finalIntersectionId));
                   Thread.sleep(VEHICLE_SPAWN_DELAY_MS);
                 }
               } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
               }
               log.info(
-                  "batch_vehicle_creation_completed count={} simulationType=motorway", numVehicles);
+                  "batch_vehicle_creation_completed count={} simulationType=motorway", MULTIPLE_VEHICLES_COUNT);
             })
         .start();
   }
@@ -412,7 +437,10 @@ public class MotorwayViewController {
     }
 
     if (movement.equals(VehicleMovement.STRAIGHT)) {
-      Point2D start = new Point2D(origin == Locations.WEST ? VEHICLE_PATH_OFFSET : width + VEHICLE_START_OFFSET, startY);
+      Point2D start =
+          new Point2D(
+              origin == Locations.WEST ? VEHICLE_PATH_OFFSET : width + VEHICLE_START_OFFSET,
+              startY);
       Point2D end =
           new Point2D(origin == Locations.WEST ? width + VEHICLE_OFFSET : -VEHICLE_OFFSET, startY);
       return List.of(start, end);
@@ -512,17 +540,23 @@ public class MotorwayViewController {
     double xPos =
         switch (lightId) {
           case TRAFFIC_LIGHT_1 ->
-              getIntersectionCenterX(INTERSECTION_1, width) + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_1, width)
+                  + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           case TRAFFIC_LIGHT_2 ->
-              getIntersectionCenterX(INTERSECTION_2, width) + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_2, width)
+                  + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           case TRAFFIC_LIGHT_4 ->
-              getIntersectionCenterX(INTERSECTION_3, width) + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_3, width)
+                  + INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           case TRAFFIC_LIGHT_3 ->
-              getIntersectionCenterX(INTERSECTION_2, width) - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_2, width)
+                  - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           case TRAFFIC_LIGHT_5 ->
-              getIntersectionCenterX(INTERSECTION_3, width) - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_3, width)
+                  - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           case TRAFFIC_LIGHT_6 ->
-              getIntersectionCenterX(INTERSECTION_4, width) - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
+              getIntersectionCenterX(INTERSECTION_4, width)
+                  - INTERSECTION_WIDTH / INTERSECTION_WIDTH_DIVISOR;
           default -> 0;
         };
 
@@ -640,7 +674,11 @@ public class MotorwayViewController {
                 simulationPane.getChildren().remove(entry.getValue());
                 iterator.remove();
               } else {
-                entry.getValue().relocate(entry.getKey().getX() - VEHICLE_RELOCATE_OFFSET, entry.getKey().getY() - VEHICLE_RELOCATE_OFFSET);
+                entry
+                    .getValue()
+                    .relocate(
+                        entry.getKey().getX() - VEHICLE_RELOCATE_OFFSET,
+                        entry.getKey().getY() - VEHICLE_RELOCATE_OFFSET);
               }
             }
           }
@@ -663,13 +701,19 @@ public class MotorwayViewController {
   @FXML
   private void goBackToMenu() {
     if (animationTimer != null) animationTimer.stop();
+
     trafficLightController.shutdown();
+
     log.info("simulation_stopping vehicleCount={} simulationType=motorway", vehicleMap.size());
+
     for (Vehicle vehicle : vehicleMap.keySet()) vehicle.stop();
+
     vehicleMap.clear();
     simulationPane.getChildren().clear();
     compass = null;
+
     log.info("simulation_cleaned simulationType=motorway");
+
     ViewsHandler.changeView(ViewsHandler.MAIN_VIEW);
   }
 }

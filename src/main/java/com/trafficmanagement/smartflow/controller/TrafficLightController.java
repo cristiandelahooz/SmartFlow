@@ -1,5 +1,7 @@
 package com.trafficmanagement.smartflow.controller;
 
+import static com.trafficmanagement.smartflow.utils.TrafficLightConstants.*;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -7,7 +9,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
-import static com.trafficmanagement.smartflow.utils.TrafficLightConstants.*;
 
 @Slf4j
 public class TrafficLightController {
@@ -25,18 +26,16 @@ public class TrafficLightController {
   }
 
   private void startCycle() {
+      lightStates.get(LIGHT_3).set(true);
+      lightStates.get(LIGHT_5).set(true);
     scheduler.scheduleAtFixedRate(
         () -> {
-          toggleLight(LIGHT_1);
-          toggleLight(LIGHT_6);
-
-          boolean is2Green = lightStates.get(LIGHT_2).get();
-          lightStates.get(LIGHT_2).set(!is2Green);
-          lightStates.get(LIGHT_3).set(is2Green);
-
-          boolean is4Green = lightStates.get(4).get();
-          lightStates.get(4).set(!is4Green);
-          lightStates.get(5).set(is4Green);
+            toggleLight(LIGHT_1);
+            toggleLight(LIGHT_6);
+            toggleLight(LIGHT_2);
+            toggleLight(LIGHT_4);
+            toggleLight(LIGHT_5);
+            toggleLight(LIGHT_3);
         },
         INITIAL_DELAY_SECONDS,
         CYCLE_INTERVAL_SECONDS,
@@ -44,7 +43,7 @@ public class TrafficLightController {
   }
 
   private void toggleLight(int lightId) {
-    boolean newState = !lightStates.get(lightId).get();
+    boolean newState = !isGreen(lightId);
     lightStates.get(lightId).set(newState);
     log.debug("traffic_light_toggled lightId={} state={}", lightId, newState ? "green" : "red");
   }

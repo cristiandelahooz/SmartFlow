@@ -7,13 +7,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.trafficmanagement.smartflow.utils.MotorwayConstants.TOTAL_INTERSECTIONS;
+
 @Slf4j
 public class IntersectionStateManager {
 
-  private final Map<Integer, Set<Vehicle>> crossingStraightVehicles = new ConcurrentHashMap<>();
+  private final Map<Integer, Set<Vehicle>> crossingStraightVehicles;
 
-  public IntersectionStateManager() {
-    for (int ind = 1; ind <= 4; ind++) crossingStraightVehicles.put(ind, ConcurrentHashMap.newKeySet());
+  {
+    crossingStraightVehicles = new ConcurrentHashMap<>();
+    for (int ind = 1; ind <= TOTAL_INTERSECTIONS; ind++)
+      crossingStraightVehicles.put(ind, ConcurrentHashMap.newKeySet());
   }
 
   public void vehicleEntersStraightZone(int intersectionId, Vehicle vehicle) {
@@ -40,7 +44,7 @@ public class IntersectionStateManager {
 
   public boolean isOpposingTrafficCrossing(int intersectionId, Vehicle turningVehicle) {
     Locations opposingLocations =
-            turningVehicle.getOrigin() == Locations.WEST ? Locations.EAST : Locations.WEST;
+        turningVehicle.getOrigin() == Locations.WEST ? Locations.EAST : Locations.WEST;
 
     boolean hasOpposingTraffic =
         crossingStraightVehicles.get(intersectionId).stream()
@@ -52,7 +56,8 @@ public class IntersectionStateManager {
           turningVehicle.getId(),
           turningVehicle.getType(),
           turningVehicle.getOrigin(),
-          intersectionId, opposingLocations);
+          intersectionId,
+          opposingLocations);
 
     return hasOpposingTraffic;
   }

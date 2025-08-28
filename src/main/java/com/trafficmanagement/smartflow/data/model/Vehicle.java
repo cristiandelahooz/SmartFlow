@@ -1,5 +1,7 @@
 package com.trafficmanagement.smartflow.data.model;
 
+import static com.trafficmanagement.smartflow.utils.MotorwayConstants.FIRST_INTERSECTION;
+import static com.trafficmanagement.smartflow.utils.MotorwayConstants.TOTAL_INTERSECTIONS;
 import static com.trafficmanagement.smartflow.utils.VehicleConstants.*;
 
 import com.trafficmanagement.smartflow.controller.IntersectionViewController;
@@ -318,9 +320,7 @@ public class Vehicle implements Runnable {
   }
 
   private int getMyCurrentIntersectionId() {
-    for (int ind = MotorwayConstants.FIRST_INTERSECTION;
-        ind <= MotorwayConstants.TOTAL_INTERSECTIONS;
-        ind++) {
+    for (int ind = FIRST_INTERSECTION; ind <= TOTAL_INTERSECTIONS; ind++) {
       double centerX =
           motorwayViewController.getIntersectionCenterX(
               ind, motorwayViewController.getSimulationPaneWidth());
